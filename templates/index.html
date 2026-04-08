@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira Dashboard - ATG</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .card-header { font-weight: bold; border-radius: 10px 10px 0 0 !important; }
+        .bg-urgent { background-color: #dc3545; color: white; }
+        .bg-warning-custom { background-color: #ffc107; color: #000; }
+        .bg-info-custom { background-color: #0d6efd; color: white; }
+        .issue-row:hover { background-color: #f8f9fa; }
+        .refresh-time { font-size: 0.8rem; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">ATG Jira Monitor</span>
+            <span id="last-update" class="text-light refresh-time">Atualizando...</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <!-- Pessoais -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-info-custom">⏳ Chamados Aguardando Atendimento</div>
+                    <div class="card-body p-0">
+                        <table class="table mb-0">
+                            <tbody id="pessoais_aguardando"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bg-warning-custom">⚠️ SLA Crítico (< 1h)</div>
+                    <div class="card-body p-0">
+                        <table class="table mb-0">
+                            <tbody id="pessoais_sla_critico"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">🕰️ Sem Interação (+3 dias)</div>
+                    <div class="card-body p-0">
+                        <table class="table mb-0">
+                            <tbody id="pessoais_sem_interacao"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fila DBA -->
+            <div class="col-md-4">
+                <div class="card border-danger">
+                    <div class="card-header bg-urgent">🔥 Fila DBA Urgente</div>
+                    <div class="card-body p-0">
+                        <table class="table mb-0">
+                            <tbody id="dba_urgente"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/data');
+                const data = await response.json();
+                
+                updateTable('pessoais_aguardando', data.pessoais_aguardando);
+                updateTable('pessoais_sla_critico', data.pessoais_sla_critico);
+                updateTable('pessoais_sem_interacao', data.pessoais_sem_interacao);
+                updateTable('dba_urgente', data.dba_urgente);
+                
+                document.getElementById('last-update').innerText = 'Última atualização: ' + new Date().toLocaleTimeString();
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+            }
+        }
+
+        function updateTable(id, issues) {
+            const tbody = document.getElementById(id);
+            if (!issues || issues.length === 0) {
+                tbody.innerHTML = '<tr><td class="p-3 text-muted">Nenhum chamado encontrado.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = issues.map(issue => `
+                <tr class="issue-row">
+                    <td class="p-3">
+                        <strong>${issue.key}</strong> - ${issue.summary}<br>
+                        <small class="text-muted">Atualizado em: ${issue.updated}</small>
+                        <a href="${issue.url}" target="_blank" class="btn btn-sm btn-outline-primary float-end">Abrir</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Atualiza a cada 5 minutos
+        fetchData();
+        setInterval(fetchData, 300000);
+    </script>
+</body>
+</html>
