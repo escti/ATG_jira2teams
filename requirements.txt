@@ -2,3 +2,13 @@ flask
 requests
 pytz
 python-dotenv
+
+# --- Dependências do serviço Teams (instalar separadamente) ---
+# cd services/teams
+# pip install -r requirements.txt
+#
+# Arquivo: services/teams/requirements.txt
+# requests
+# pytz
+# python-dotenv
+
