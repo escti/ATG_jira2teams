@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from jira_service import JiraClient
 import os
 from dotenv import load_dotenv
@@ -14,8 +14,10 @@ def index():
 
 @app.route('/api/data')
 def get_data():
+    # Verifica se há parâmetro de usuário na query string
+    user = request.args.get('user')
     try:
-        data = jira_client.get_dashboard_data()
+        data = jira_client.get_dashboard_data(user=user)
         return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

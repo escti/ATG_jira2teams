@@ -16,8 +16,14 @@ class JiraClient:
         self.headers = {"Content-Type": "application/json", "Accept": "application/json"}
         self.api_url_primary = f"{self.server}/rest/api/3/search/jql"
         self.api_url_fallback = f"{self.server}/rest/api/3/search"
+        # Define o usuário padrão como 'currentUser()' se não houver parâmetro
+        self.current_user = os.getenv('JIRA_USERNAME')
 
-    def run_jql_query(self, jql, max_results=100):
+    def run_jql_query(self, jql, max_results=100, user=None):
+        # Se for um usuário específico, substitui currentUser() por 'user_name'
+        if user:
+            jql = jql.replace("currentUser()", f"assignee = '{user}'")
+        
         payload = {
             "jql": jql,
             "maxResults": max_results,
@@ -37,7 +43,7 @@ class JiraClient:
             logging.error(f"Erro na query JQL: {e}")
             return None
 
-    def get_dashboard_data(self):
+    def get_dashboard_data(self, user=None):
         queries = {
             "pessoais_aguardando": 'assignee = currentUser() AND statusCategory != Done AND updated <= endOfYear() AND "Tempo de resolução" != paused()',
             "pessoais_sla_critico": 'assignee = currentUser() AND statusCategory != Done AND updated <= endOfYear() AND "Tempo de resolução" != paused() AND "Tempo de resolução" <= remaining("1h")',
@@ -47,7 +53,7 @@ class JiraClient:
         
         results = {}
         for key, jql in queries.items():
-            issues = self.run_jql_query(jql)
+            issues = self.run_jql_query(jql, user=user)
             results[key] = self._format_issues(issues) if issues is not None else []
             
         return results
