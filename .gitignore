@@ -2,10 +2,28 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .env
-*.log
 logs/
-.DS_Store
+# Logs and databases
+*.log
+*.sqlite
 
-# Docker
-.Dockerfile
-.dockerignore
+# IDE Files
+.idea/*
+.vscode/*
+
+# Local development
+.env.local
+continue.json
+tmp/
+temp/
+
+# Testing
+coverage.*
+htmlcov/*
+.pytest_cache/*
+
+# Editor backup files
+*.swp
+*.swo
+/.back~
+
