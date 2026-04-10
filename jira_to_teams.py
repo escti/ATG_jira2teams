@@ -8,7 +8,7 @@ from jira_service import JiraClient
 
 # Configurar logging
 logging.basicConfig(
-    filename='/home/atg/scripts/jira_to_teams.log',
+    filename='logs/jira_to_teams.log',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )

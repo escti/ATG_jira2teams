@@ -99,10 +99,10 @@ Acesse o painel de monitoramento no navegador:
 - **Ação**: Verifique se os tickets do Jira estão sendo listados.
 
 ### Execução do Script de Notificação (Teams)
-O script de notificação pode ser executado via linha de comando dentro do contêiner ou via cron (se configurado). Para testar manualmente:
+O script de notificação pode ser executado manualmente via comando Docker:
 
 ```bash
-docker-compose exec app_teams python jira_to_teams.py
+docker-compose exec jira-notifier python3 jira_to_teams.py
 ```
 
 ## Passo 6: Log de Eventos
@@ -111,27 +111,35 @@ Em caso de problemas, verifique os logs dos contêineres:
 
 ```bash
 # Logs do serviço Web
-docker-compose logs -f app_web
+docker-compose logs -f jira-web
 
-# Logs do serviço Teams
-docker-compose logs -f app_teams
-
-# Logs do serviço Jira
-docker-compose logs -f jira_service
+# Logs do serviço Teams (Notifier)
+docker-compose logs -f jira-notifier
 ```
 
-## Dica: Persistência de Dados
+## Passo 7: Como Atualizar o Sistema (Git)
 
-Se o `docker-compose.yml` estiver configurado para usar volumes (mapeando uma pasta local para persistir dados), certifique-se de que a pasta no host exista e tenha permissões de leitura/escrita para o usuário `opc`:
+Caso deseje baixar a versão mais atual do sistema e atualizar os contêineres:
 
-```bash
-# Exemplo (ajuste o nome do volume conforme o docker-compose.yml)
-mkdir -p ~/atg_data
-chown opc:opc ~/atg_data
-```
+1. **Baixar as atualizações do Git**:
+   ```bash
+   git pull origin main
+   ```
+
+2. **Reconstruir e reiniciar os contêineres**:
+   Para garantir que as novas mudanças no código (ou no Dockerfile/requirements) sejam aplicadas, execute:
+   ```bash
+   docker-compose up -d --build
+   ```
+
+3. **Verificar os logs** para garantir que tudo subiu corretamente:
+   ```bash
+   docker-compose ps
+   ```
 
 ---
 
 **Servidor**: `srvcron` (10.0.0.253)  
-**OS**: Oracle Linux 8.10 (aarch64)  
-**Versão do Script**: 1.0 (Dockerizado)
+**OS**: Oracle Linux 8.10 (ARM64 / aarch64)  
+**Ambiente**: Docker + Docker Compose  
+**Versão do Script**: 1.1 (Dockerizado)
