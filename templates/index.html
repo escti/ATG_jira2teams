@@ -10,16 +10,36 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root {
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             --glass-bg: rgba(255, 255, 255, 0.7);
             --glass-border: rgba(255, 255, 255, 0.4);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             --accent-blue: #4Facfe;
             --accent-purple: #00f2fe;
             --text-dark: #2c3e50;
+            --text-muted: #7f8c8d;
+            --card-hover-bg: rgba(255, 255, 255, 0.9);
+            --nav-bg: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(0, 0, 0, 0.04);
+            --select-bg: white;
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-gradient: radial-gradient(circle at 50% 50%, #1c1c1c 0%, #0d0d0d 100%);
+            --glass-bg: rgba(40, 40, 45, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            --text-dark: #f8f9fa;
+            --text-muted: #adb5bd;
+            --card-hover-bg: rgba(50, 50, 60, 0.8);
+            --nav-bg: rgba(20, 20, 25, 0.9);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --select-bg: #2b3035;
         }
 
         body {
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
             color: var(--text-dark);
@@ -28,7 +48,7 @@
 
         /* Glassmorphism Navbar */
         .navbar-custom {
-            background: rgba(255, 255, 255, 0.6) !important;
+            background: var(--nav-bg) !important;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--glass-border);
@@ -100,26 +120,26 @@
         /* Issue Rows Micro-animations */
         .issue-row {
             transition: all 0.2s ease-in-out;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid var(--border-color);
             background: transparent;
         }
 
         .issue-row:hover {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: var(--card-hover-bg);
             transform: scale(1.01);
             border-radius: 8px;
         }
 
         .issue-title {
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-dark);
             margin-bottom: 6px;
             font-size: 1.05rem;
         }
 
         .issue-meta {
             font-size: 0.85rem;
-            color: #7f8c8d;
+            color: var(--text-muted);
             font-weight: 500;
         }
 
@@ -233,20 +253,24 @@
                     <i class="bi bi-arrow-clockwise me-1"></i> Sincronizar
                 </button>
 
-                <div
-                    class="d-flex align-items-center bg-white p-1 pe-3 rounded-pill shadow-sm border border-opacity-50">
+                <div class="d-flex align-items-center bg-theme-select p-1 pe-3 rounded-pill shadow-sm border border-opacity-50"
+                    style="background: var(--select-bg);">
                     <div class="bg-light rounded-circle p-2 px-3 me-2 text-primary">
                         <i class="bi bi-person-fill"></i>
                     </div>
                     <span class="me-2 text-muted fw-bold d-none d-md-inline" style="font-size: 0.9rem;">Visão:</span>
                     <select id="user-select"
-                        class="form-select border-0 bg-transparent p-0 shadow-none fw-bold text-dark"
-                        style="width: auto; min-width: 120px; cursor: pointer;">
+                        class="form-select border-0 bg-transparent p-0 shadow-none fw-bold text-theme-main"
+                        style="width: auto; min-width: 120px; cursor: pointer; color: var(--text-dark);">
                         {% for user in users %}
                         <option value="{{ user }}">{{ user }}</option>
                         {% endfor %}
                     </select>
                 </div>
+                <button id="btn-theme" class="btn btn-refresh-styled ms-2 p-2 px-3 border-0 shadow-sm"
+                    onclick="toggleTheme()" title="Alternar Modo Escuro">
+                    <i class="bi bi-moon-stars-fill text-primary" id="theme-icon"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -266,7 +290,7 @@
     </div>
 
     <div class="container px-lg-5">
-        <div class="row g-4">
+        <div class="row g-4 text-start">
             <!-- Pessoais Column -->
             <div class="col-xl-8 col-lg-7">
 
@@ -446,6 +470,31 @@
 
             // Alterar o dono reseta e puxa novos tickets instantaneamente
             document.getElementById('user-select').addEventListener('change', manualRefresh);
+
+            // --- Gerenciamento de Tema (Dark Mode) ---
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-bs-theme', theme);
+                localStorage.setItem('theme', theme);
+                const icon = document.getElementById('theme-icon');
+                if (theme === 'dark') {
+                    icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+                    icon.classList.add('text-warning');
+                    icon.classList.remove('text-primary');
+                } else {
+                    icon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+                    icon.classList.remove('text-warning');
+                    icon.classList.add('text-primary');
+                }
+            }
+
+            function toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            }
+
+            // Inicializar tema
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            setTheme(savedTheme);
         </script>
 </body>
 

@@ -9,20 +9,24 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 class JiraClient:
     def __init__(self):
-        self.server = os.getenv('JIRA_SERVER')
-        self.username = os.getenv('JIRA_USERNAME')
-        self.password = os.getenv('JIRA_PASSWORD')
+        # Normaliza a URL: remove aspas (caso existam no .env) e barras finais
+        self.server = os.getenv('JIRA_SERVER', '').strip('"').strip("'").rstrip('/')
+        self.username = os.getenv('JIRA_USERNAME', '').strip('"').strip("'")
+        self.password = os.getenv('JIRA_PASSWORD', '').strip('"').strip("'")
         self.auth = (self.username, self.password)
         self.headers = {"Content-Type": "application/json", "Accept": "application/json"}
+        # Jira Cloud v3 endpoints
         self.api_url_primary = f"{self.server}/rest/api/3/search/jql"
         self.api_url_fallback = f"{self.server}/rest/api/3/search"
-        # Define o usuário padrão como 'currentUser()' se não houver parâmetro
-        self.current_user = os.getenv('JIRA_USERNAME')
+        self.current_user = self.username
 
     def run_jql_query(self, jql, max_results=100, user=None):
         # Se for um usuário específico, substitui currentUser() por 'user_name'
         if user:
-            jql = jql.replace("currentUser()", f"assignee = '{user}'")
+            # Em Jira Cloud, recomeda-se usar o e-mail ou accountId, mas o JQL aceita string
+            jql = jql.replace("currentUser()", f"'{user}'")
+
+
         
         payload = {
             "jql": jql,
