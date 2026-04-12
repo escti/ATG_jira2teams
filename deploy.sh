@@ -12,12 +12,15 @@ echo -e "${YELLOW}==============================================${NC}"
 
 # 1. Checagem de ferramentas
 if ! command -v git &> /dev/null; then
-    echo -e "${RED}[Erro] git não encontrado. Instale o git para executar as atualizações.${NC}"
+    echo -e "${RED}[Erro] git não encontrado. No Oracle Linux, você pode instalá-lo com:${NC}"
+    echo -e "${YELLOW}sudo yum install git -y${NC}"
     exit 1
 fi
 
 if ! command -v docker &> /dev/null; then
-    echo -e "${RED}[Erro] docker não encontrado no servidor.${NC}"
+    echo -e "${RED}[Erro] docker não encontrado no servidor. No Oracle Linux, instale o service com:${NC}"
+    echo -e "${YELLOW}sudo yum install docker -y${NC}"
+    echo -e "${YELLOW}sudo systemctl start docker && sudo systemctl enable docker${NC}"
     exit 1
 fi
 
@@ -26,7 +29,10 @@ if ! command -v docker-compose &> /dev/null; then
     if docker compose version &> /dev/null; then
         COMPOSE_CMD="docker compose"
     else
-        echo -e "${RED}[Erro] docker-compose (ou docker compose) não encontrado.${NC}"
+        echo -e "${RED}[Erro] docker-compose não encontrado. Instale o plugin com:${NC}"
+        echo -e "${YELLOW}sudo yum install docker-compose-plugin -y${NC}"
+        echo -e "${RED}Ou caso queira o script binário avulso:${NC}"
+        echo -e "${YELLOW}sudo curl -L \"https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-aarch64\" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose${NC}"
         exit 1
     fi
 fi
