@@ -43,69 +43,45 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
 
 ---
 
-## 🛠️ Instalação
+## 🛠️ Instalação (Recomendado via Docker na OCI)
+
+Este projeto é preparado para o Docker Compose, especialmente com host Oracle Linux 8. 
 
 ### **1. Clonar o repositório**
+No servidor que hospedará a aplicação:
 ```bash
-cd "C:\APPs\GitHub_Pessoal\ATG\ATG_jira2teams"
+cd ~
+git clone https://github.com/escti/ATG_jira2teams.git
+cd ATG_jira2teams
 ```
 
-### **2. Instalar dependências**
-
-**Para Web:**
+### **2. Configurar variáveis de ambiente**
+Copie o arquivo de exemplo:
 ```bash
-pip install -r requirements.txt
+cp .env.example .env
 ```
-
-**Para Teams (separado):**
-```bash
-cd services/teams
-pip install -r requirements.txt
-```
-
-### **3. Configurar variáveis de ambiente**
-
-**a) Copie os arquivos de exemplo:**
-```bash
-copy .env.example .env
-copy services/teams/.env.example services/teams/.env
-```
-
-**b) Edite os arquivos `.env` com suas credenciais:**
-
-**Web (`.env`):**
+Edite o arquivo `.env` com suas credenciais (ajustando a URL do painel Webhook e conta do JIRA):
 ```env
-# Configuração do Jira
-JIRA_SERVER=http://jira.suaempresa.com.br
-JIRA_USERNAME=seu_user_jira
-JIRA_PASSWORD=sua_senha_jira
+JIRA_SERVER=https://jira.suaempresa.com.br
+JIRA_USERNAME=usuario@escti.com
+JIRA_PASSWORD=seu_token_aqui
+TEAMS_WEBHOOK_URL=https://outlook.office.com/webhook/...
 ```
 
-**Teams (`services/teams/.env`):**
-```env
-# Configuração do Jira
-JIRA_SERVER=http://jira.suaempresa.com.br
-JIRA_USERNAME=seu_user_jira
-JIRA_PASSWORD=sua_senha_jira
-
-# Configuração do Teams
-TEAMS_WEBHOOK_URL=https://yourcompany.webhook.office.com/...
-```
-
-### **4. Testar a aplicação**
-
-**Web:**
+### **3. Iniciar a stack de acompanhamento**
 ```bash
-python app.py
+docker-compose up -d
 ```
-Abra `http://localhost:5000` no navegador
+Verifique se tudo está OK com `docker-compose ps`.
 
-**Teams:**
-```bash
-cd services/teams
-python "jira_to_teams.py"
-```
-(Execute manualmente ou agende via cron/task scheduler)
+---
+
+## 🛠️ Modo Desenvolvimento Local
+Caso não queira rodar em containers para criar testes na própria máquina:
+1. `pip install -r requirements.txt`
+2. `copy .env.example .env` e o edite.
+3. Para UI web: `python app.py`
+4. Para fluxo bot: `python jira_to_teams.py`
 
 ---
 
@@ -127,21 +103,16 @@ python "jira_to_teams.py"
 2. Aguarde o spinner de carregamento
 3. Dados atualizados!
 
-### **2. Script Teams**
+### **2. Bot Microsoft Teams**
 
-**Execução manual:**
-1. Abra o terminal
-2. Navegue para a pasta: `cd services/teams`
-3. Execute: `python "jira_to_teams.py"`
-4. Verifique o log: `type jira_to_teams.log`
+**Funcionamento em Fundo (Docker):**
+Após lançada pela instalação, o Bot passará a rodar automaticamente e não requer ativação manual. 
+Sempre que uma hora se passar (entre as 07h e 17h, **de segunda a sexta-feira**) ele baterá automaticamente o relógio interno no minuto `59` para puxar os novos resultados e mandar os Cards.
 
-**Execução agendada (Windows):**
-- Use Task Scheduler para rodar o script periodicamente
-- Ou use `taskschd.msc` para criar uma tarefa
-
-**Execução agendada (Linux/Mac):**
-- Adicione ao crontab: `crontab -e`
-- Exemplo: `*/15 * * * * cd /home/atg/scripts && python jira_to_teams.py >> /home/atg/scripts/cron.log 2>&1`
+Cheque a atividade utilizando:
+```bash
+docker-compose logs -f jira-notifier
+```
 
 ---
 
@@ -163,19 +134,16 @@ python "jira_to_teams.py"
 ```
 ATG_jira2teams/
 ├── app.py                      # Backend Flask (Web)
-├── jira_service.py             # Lógica de conexão com Jira (Web) - *duplicado para facilitar importação*
+├── jira_service.py             # Lógica integrada de conexão com Jira
+├── jira_to_teams.py            # Loop Bot do Teams
+├── _old/                       # Pasta com docs e versões antigas de scripts
 ├── templates/
 │   └── index.html              # Frontend Web
-├── services/
-│   ├── web/                    # # Dependências Web
-│   │   └── jira_service.py     # Lógica de conexão com Jira (Web) - *versão organizada*
-│   └── teams/                   # Script Teams
-│       ├── jira_to_teams.py    # Script para envio ao Teams
-│       ├── requirements.txt    # Dependências Teams
-│       └── .env.example        # Exemplo de configuração Teams
-├── requirements.txt            # Dependências Python (Web)
-├── .env.example                # Exemplo de configuração (Web)
-└── README.md                   # Este arquivo
+├── docker-compose.yml          # Setup da Stack na OCI
+├── Dockerfile                  # Build base para python e deps OCI
+├── requirements.txt            # Dependências unificadas Python
+├── .env.example                # Exemplo de configuração unificada
+└── README.md                   # Este arquivo (Documentação Unificada)
 ```
 
 ---
@@ -235,28 +203,12 @@ O sistema substitui dinamicamente a função `currentUser()` do Jira pelo nome d
 - Verifique se o Jira está retornando dados
 - Confirme se o usuário selecionado tem chamados atribuídos
 
-### **Teams (Script)**
+### **Teams (Bot Automático)**
 
-**Script não inicia**
-- Verifique se todas as variáveis de ambiente estão definidas
-- Teste manualmente: `python "jira_to_teams.py"`
-- Verifique o log: `type jira_to_teams.log`
-
-**Erro ao enviar para Teams**
-- Verifique se o webhook URL está correto
-- Teste o webhook diretamente no navegador
-- Confira se o usuário tem permissão para receber mensagens
-
-**Log mostra "Erro na consulta"**
-- Confira se as queries JQL são válidas no seu Jira
-- Teste as queries manualmente no Jira Browser
-- Verifique se os campos customizados existem ("Tempo de resolução", "Tempo de Primeira Resposta")
-
----
-
-## 🔄 Scripts Originais
-
-O projeto mantém os scripts originais em `services/teams/` para envio de notificações ao Teams. Ambos (Web e Teams) usam a mesma lógica de queries, garantindo consistência entre as funcionalidades.
+**Nada é disparado?**
+- Verifique se as variáveis de integração estão íntegras e salvas antes do run.
+- Lembre-se do loop: Ele enviará as notificações unicamente no minuto `59` de horas entre `07:00` e `17:00`, de **segunda a sexta-feira**. Aos finais de semana ou fora do horário, ele estará apensas hibernando.
+- Tente `docker logs jira-notifier` e avalie possíveis erros nos registros internos. Pode ter sido disparada alguma exceção tratada pelas try/excepts durante o último despertar.
 
 ---
 

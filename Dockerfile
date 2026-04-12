@@ -16,4 +16,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["python3", "app.py", "&", "sleep", "2", "&&", "python3", "jira_to_teams.py"]
+CMD ["python3", "app.py"]

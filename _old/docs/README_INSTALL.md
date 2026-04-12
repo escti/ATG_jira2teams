@@ -50,16 +50,16 @@ O sistema precisa de credenciais para se conectar ao Jira e ao Microsoft Teams.
     ```
 
 3.  **Atenção**: Modifique as seguintes variáveis (substituindo pelos dados reais):
-    - `JIRA_API_TOKEN`: Token de API do usuário do Jira.
-    - `JIRA_EMAIL`: Email associado ao token.
-    - `JIRA_HOST`: URL do seu servidor Jira (ex: `https://jira.escti.com.br`).
+    - `JIRA_PASSWORD`: Token de API do usuário do Jira.
+    - `JIRA_USERNAME`: Email associado ao token.
+    - `JIRA_SERVER`: URL do seu servidor Jira (ex: `https://jira.suaempresa.com.br`).
     - `TEAMS_WEBHOOK_URL`: URL do webhook do canal do Microsoft Teams.
 
     *Exemplo de estrutura:*
     ```env
-    JIRA_API_TOKEN=seu_token_aqui
-    JIRA_EMAIL=usuario@escti.com
-    JIRA_HOST=https://jira.escti.com.br
+    JIRA_SERVER=https://jira.suaempresa.com.br
+    JIRA_USERNAME=usuario@escti.com
+    JIRA_PASSWORD=seu_token_aqui
     TEAMS_WEBHOOK_URL=https://outlook.office.com/webhook/...
     ```
 
@@ -99,11 +99,9 @@ Acesse o painel de monitoramento no navegador:
 - **Ação**: Verifique se os tickets do Jira estão sendo listados.
 
 ### Execução do Script de Notificação (Teams)
-O script de notificação pode ser executado manualmente via comando Docker:
+O script de notificação **já roda automaticamente em segundo plano** no contêiner `jira-notifier`. 
 
-```bash
-docker-compose exec jira-notifier python3 jira_to_teams.py
-```
+Nosso código foi configurado para disparar agendamentos automáticos todos os dias, de hora em hora (entre 07:59 e 17:59). Dessa forma, nenhuma ação manual é necessária após subir os contêineres e ele não causará spam no seu canal.
 
 ## Passo 6: Log de Eventos
 
