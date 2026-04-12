@@ -30,18 +30,24 @@ class JiraClient:
             "fields": ["key", "summary", "updated", "status"]
         }
         
-        try:
-            # Tenta endpoint primária
-            response = requests.post(self.api_url_primary, auth=self.auth, headers=self.headers, json=payload)
-            if response.status_code != 200:
-                # Tenta fallback
-                response = requests.post(self.api_url_fallback, auth=self.auth, headers=self.headers, json=payload)
-            
-            response.raise_for_status()
-            return response.json().get("issues", [])
-        except Exception as e:
-            logging.error(f"Erro na query JQL: {e}")
-            return None
+        # Tenta endpoint primária
+        response = requests.post(self.api_url_primary, auth=self.auth, headers=self.headers, json=payload)
+        
+        if response.status_code != 200:
+            # Tenta fallback pra versão de API mais crua
+            fallback = requests.post(self.api_url_fallback, auth=self.auth, headers=self.headers, json=payload)
+            if fallback.status_code != 200:
+                # Levanta o erro real do Jira extraindo a string da Atlassian
+                try:
+                    err_msgs = response.json().get("errorMessages", [])
+                    err_txt = " | ".join(err_msgs) if err_msgs else response.text
+                except:
+                    err_txt = response.text
+                raise Exception(f"Erro JQL do Jira ({response.status_code}): {err_txt}")
+            response = fallback
+        
+        response.raise_for_status()
+        return response.json().get("issues", [])
 
     def get_dashboard_data(self, user=None):
         queries = {

@@ -10,7 +10,14 @@ jira_client = JiraClient()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    raw_users = os.getenv('JIRA_DASHBOARD_USERS', '')
+    if raw_users:
+        users = [u.strip() for u in raw_users.split(',') if u.strip()]
+    else:
+        # Pega o email do JIRA default para não deixar em branco, limpando apenas o prefixo
+        users = [os.getenv('JIRA_USERNAME', '').split('@')[0]]
+
+    return render_template('index.html', users=users)
 
 @app.route('/api/data')
 def get_data():
