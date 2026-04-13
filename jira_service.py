@@ -20,14 +20,8 @@ class JiraClient:
         self.api_url_fallback = f"{self.server}/rest/api/3/search"
         self.current_user = self.username
 
-    def run_jql_query(self, jql, max_results=100, user=None):
-        # Se for um usuário específico, substitui currentUser() por 'user_name'
-        if user:
-            # Em Jira Cloud, recomeda-se usar o e-mail ou accountId, mas o JQL aceita string
-            jql = jql.replace("currentUser()", f"'{user}'")
-
-
-        
+    def run_jql_query(self, jql, max_results=100):
+        logging.info(f"Executando JQL no Jira: {jql}")
         payload = {
             "jql": jql,
             "maxResults": max_results,
@@ -51,20 +45,41 @@ class JiraClient:
             response = fallback
         
         response.raise_for_status()
-        return response.json().get("issues", [])
+        issues = response.json().get("issues", [])
+        logging.info(f"Jira retornou {len(issues)} resultados.")
+        return issues
 
     def get_dashboard_data(self, user=None):
+        # Resolução inteligente de usuário
+        if user:
+            user_clean = user.strip().lower()
+            # Se for o prefixo do username configurado (ex: thiago -> thiago.albuquerque@...)
+            if user_clean in self.username.lower():
+                assignee_email = self.username
+            # Se for um nome curto sem @, tenta anexar o domínio do JIRA_USERNAME
+            elif "@" not in user_clean and "@" in self.username:
+                domain = self.username.split("@")[1]
+                assignee_email = f"{user_clean}@{domain}"
+            else:
+                assignee_email = user.strip()
+        else:
+            assignee_email = self.username
+        
         queries = {
-            "pessoais_aguardando": 'assignee = currentUser() AND statusCategory != Done AND updated <= endOfYear() AND "Tempo de resolução" != paused()',
-            "pessoais_sla_critico": 'assignee = currentUser() AND statusCategory != Done AND updated <= endOfYear() AND "Tempo de resolução" != paused() AND "Tempo de resolução" <= remaining("1h")',
-            "pessoais_sem_interacao": 'assignee = currentUser() AND statusCategory != Done and updatedDate <= "-3d" ORDER BY updatedDate asc',
-            "dba_urgente": 'assignee IS EMPTY AND "Grupo Solucionador[Group Picker (single group)]" = "DC - Banco de Dados (DBA)" AND statusCategory != Done AND ("Tempo de Primeira Resposta" = breached() OR "Tempo de Primeira Resposta" <= remaining("1h"))'
+            "pessoais_aguardando": f"assignee = '{assignee_email}' AND resolution = Unresolved AND status NOT IN (Concluído, Backlog, Cancelado) ORDER BY status DESC, updated ASC, 'Tempo de resolução' DESC",
+            "pessoais_sla_critico": f"assignee = '{assignee_email}' AND statusCategory != Done AND updated <= endOfYear() AND 'Tempo de resolução' != paused() AND 'Tempo de resolução' <= remaining('1h')",
+            "pessoais_sem_interacao": f"assignee = '{assignee_email}' AND statusCategory != Done and updatedDate <= '-3d' ORDER BY updatedDate ASC",
+            "dba_urgente": "assignee IS EMPTY AND 'Grupo Solucionador[Group Picker (single group)]' = 'DC - Banco de Dados (DBA)' AND statusCategory != Done AND ('Tempo de Primeira Resposta' = breached() OR 'Tempo de Primeira Resposta' <= remaining('1h'))"
         }
         
         results = {}
         for key, jql in queries.items():
-            issues = self.run_jql_query(jql, user=user)
-            results[key] = self._format_issues(issues) if issues is not None else []
+            try:
+                issues = self.run_jql_query(jql)
+                results[key] = self._format_issues(issues) if issues else []
+            except Exception as e:
+                logging.error(f"Erro na query '{key}': {e}")
+                results[key] = []
             
         return results
 

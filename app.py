@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from jira_service import JiraClient
 import os
+import requests
 from dotenv import load_dotenv
 
 load_dotenv() # Carrega do .env se existir
