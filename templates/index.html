@@ -5,307 +5,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jira Dashboard - ATG</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'accent-blue': '#4Facfe',
+                        'accent-purple': '#00f2fe',
+                        'glass-bg': 'rgba(255, 255, 255, 0.7)',
+                        'dark-glass-bg': 'rgba(40, 40, 45, 0.7)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            --accent-blue: #4Facfe;
-            --accent-purple: #00f2fe;
-            --text-dark: #2c3e50;
-            --text-muted: #7f8c8d;
-            --card-hover-bg: rgba(255, 255, 255, 0.9);
-            --nav-bg: rgba(255, 255, 255, 0.8);
-            --border-color: rgba(0, 0, 0, 0.04);
-            --select-bg: white;
-        }
-
-        [data-bs-theme="dark"] {
-            --bg-gradient: radial-gradient(circle at 50% 50%, #1c1c1c 0%, #0d0d0d 100%);
-            --glass-bg: rgba(40, 40, 45, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-            --text-dark: #f8f9fa;
-            --text-muted: #adb5bd;
-            --card-hover-bg: rgba(50, 50, 60, 0.8);
-            --nav-bg: rgba(20, 20, 25, 0.9);
-            --border-color: rgba(255, 255, 255, 0.05);
-            --select-bg: #2b3035;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            min-height: 100vh;
-            font-family: 'Inter', sans-serif;
-            color: var(--text-dark);
-            padding-bottom: 50px;
-        }
-
-        /* Glassmorphism Navbar */
-        .navbar-custom {
-            background: var(--nav-bg) !important;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            padding: 15px 0;
-            margin-bottom: 2rem;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            background: linear-gradient(120deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.6rem;
-            letter-spacing: -0.5px;
-        }
-
-        /* Glassmorphism Cards */
-        .card-custom {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            box-shadow: var(--glass-shadow);
-            margin-bottom: 25px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card-custom:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
-        }
-
-        /* Headers with modern gradients */
-        .header-blue {
-            background: linear-gradient(135deg, #4Facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-
-        .header-orange {
-            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            color: #333;
-            font-weight: 600;
-        }
-
-        .header-gray {
-            background: linear-gradient(135deg, #8baaaa 0%, #ae8b9c 100%);
-            color: white;
-        }
-
-        .header-red {
-            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
-            color: white;
-        }
-
-        .card-header-styled {
-            font-weight: 600;
-            padding: 14px 24px;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-            border-bottom: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Issue Rows Micro-animations */
-        .issue-row {
-            transition: all 0.2s ease-in-out;
-            border-bottom: 1px solid var(--border-color);
-            background: transparent;
-        }
-
-        .issue-row:hover {
-            background-color: var(--card-hover-bg);
-            transform: scale(1.01);
-            border-radius: 8px;
-        }
-
-        .issue-title {
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 6px;
-            font-size: 1.05rem;
-        }
-
-        .issue-meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        /* Modern Buttons */
-        .btn-modern {
-            border-radius: 50px;
-            padding: 6px 18px;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .btn-modern-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
-        }
-
-        .btn-modern-primary:hover {
-            opacity: 0.95;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.6);
-        }
-
-        .btn-refresh-styled {
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            color: #333;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            font-weight: 600;
-            border-radius: 50px;
-            padding: 8px 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .btn-refresh-styled:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            background: white;
-        }
-
-        /* Skeleton loading animation */
-        @keyframes shimmer {
-            0% {
-                background-position: -468px 0;
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply min-h-screen transition-colors duration-300;
+                background-image: radial-gradient(circle at 50% 50%, #fdfbfb 0%, #ebedee 100%);
+                background-attachment: fixed;
             }
-
-            100% {
-                background-position: 468px 0;
+            .dark body {
+                background-image: radial-gradient(circle at 50% 50%, #1c1c1c 0%, #0d0d0d 100%);
             }
         }
 
-        .skeleton {
-            background: #f6f7f8;
-            background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-            background-repeat: no-repeat;
-            background-size: 800px 104px;
-            display: inline-block;
-            position: relative;
-            animation-duration: 1.5s;
-            animation-fill-mode: forwards;
-            animation-iteration-count: infinite;
-            animation-name: shimmer;
-            animation-timing-function: linear;
-            height: 20px;
-            width: 100%;
-            border-radius: 6px;
+        @layer components {
+            .glass-card {
+                @apply bg-white/70 dark:bg-[#28282d]/70 backdrop-blur-xl border border-white/40 dark:border-white/10 rounded-[20px] shadow-xl overflow-hidden transition-all duration-300;
+            }
+            .glass-card:hover {
+                @apply -translate-y-1 shadow-2xl shadow-blue-500/10;
+            }
+            .card-header-styled {
+                @apply font-semibold px-6 py-3.5 text-lg tracking-wide flex items-center gap-2.5;
+            }
+            .btn-modern {
+                @apply px-4 py-1.5 rounded-full font-semibold transition-all duration-300 text-sm active:scale-95;
+            }
+            .issue-row {
+                @apply transition-all duration-200 border-b border-black/5 dark:border-white/5 hover:bg-white/90 dark:hover:bg-white/5 hover:scale-[1.01];
+            }
         }
 
-        /* Custom scrollbar */
+        /* Otimização de scrollbar conforme SKILL.md */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
-
         ::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.05);
         }
-
         ::-webkit-scrollbar-thumb {
             background: rgba(0, 0, 0, 0.15);
-            border-radius: 10px;
+            @apply rounded-full;
         }
-
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(0, 0, 0, 0.3);
-        }
-
-        .alert-jira-custom {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-left: 5px solid #dc3545;
-            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.15);
         }
     </style>
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-        <div class="container-fluid px-lg-5 px-3">
-            <span class="navbar-brand"><i class="bi bi-kanban fs-3 align-middle me-2"></i>ATG Monitor Flow</span>
+<body class="text-slate-800 dark:text-slate-100 pb-12">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-white/20 dark:border-white/5 shadow-sm py-4 mb-8">
+        <div class="container mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <i class="bi bi-kanban text-3xl align-middle bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent"></i>
+                <span class="text-2xl font-bold tracking-tight bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">
+                    ATG Monitor Flow
+                </span>
+            </div>
 
-            <div class="d-flex align-items-center gap-3 gap-md-4 mt-3 mt-lg-0 flex-wrap">
-                <div class="text-end d-none d-sm-block">
-                    <div id="last-update" class="text-muted text-uppercase"
-                        style="font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">Atualizando...</div>
+            <div class="flex flex-wrap items-center justify-center gap-4 lg:gap-6">
+                <div class="hidden sm:block text-right">
+                    <div id="last-update" class="text-[10px] uppercase font-bold tracking-widest text-slate-400">Atualizando...</div>
                 </div>
 
-                <button id="btn-refresh" class="btn btn-refresh-styled" onclick="manualRefresh()">
-                    <i class="bi bi-arrow-clockwise me-1"></i> Sincronizar
+                <button id="btn-refresh" onclick="manualRefresh()" class="flex items-center gap-2 bg-white dark:bg-zinc-800 text-slate-700 dark:text-slate-200 px-6 py-2 rounded-full font-bold shadow-sm border border-black/5 dark:border-white/5 hover:shadow-md transition-all active:scale-95">
+                    <i class="bi bi-arrow-clockwise"></i> Sincronizar
                 </button>
 
-                <div class="d-flex align-items-center bg-theme-select p-1 pe-3 rounded-pill shadow-sm border border-opacity-50"
-                    style="background: var(--select-bg);">
-                    <div class="bg-light rounded-circle p-2 px-3 me-2 text-primary">
+                <div class="flex items-center bg-white dark:bg-zinc-800 p-1 pr-4 rounded-full shadow-sm border border-black/5 dark:border-white/5">
+                    <div class="bg-blue-50 dark:bg-blue-900/30 rounded-full p-2 px-3 mr-2 text-blue-500">
                         <i class="bi bi-person-fill"></i>
                     </div>
-                    <span class="me-2 text-muted fw-bold d-none d-md-inline" style="font-size: 0.9rem;">Visão:</span>
-                    <select id="user-select"
-                        class="form-select border-0 bg-transparent p-0 shadow-none fw-bold text-theme-main"
-                        style="width: auto; min-width: 120px; cursor: pointer; color: var(--text-dark);">
+                    <span class="hidden md:inline text-xs font-bold text-slate-400 uppercase tracking-tighter mr-2">Visão:</span>
+                    <select id="user-select" class="bg-transparent border-0 font-bold text-sm focus:ring-0 cursor-pointer outline-none">
                         {% for user in users %}
-                        <option value="{{ user }}">{{ user }}</option>
+                        <option value="{{ user }}" class="dark:bg-zinc-900">{{ user }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <button id="btn-theme" class="btn btn-refresh-styled ms-2 p-2 px-3 border-0 shadow-sm"
-                    onclick="toggleTheme()" title="Alternar Modo Escuro">
-                    <i class="bi bi-moon-stars-fill text-primary" id="theme-icon"></i>
+
+                <button id="btn-theme" onclick="toggleTheme()" class="bg-white dark:bg-zinc-800 p-2.5 px-4 rounded-full shadow-sm border border-black/5 dark:border-white/5 transition-colors group">
+                    <i class="bi bi-moon-stars-fill text-blue-500 group-hover:text-blue-400 transition-colors" id="theme-icon"></i>
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Container de mensagem de erro -->
-    <div class="container px-lg-5">
-        <div id="error-msg" class="alert alert-jira-custom rounded-4" style="display:none; margin-bottom: 2rem;">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-exclamation-triangle-fill fs-2 text-danger me-4"></i>
-                <div>
-                    <h5 class="mb-1 fw-bold text-danger">Rejeição da API do Jira</h5>
-                    <span id="error-txt" class="text-dark">Sua query JQL contém um campo que não existe ou uma sintaxe
-                        inválida. Verifique a configuração.</span>
-                </div>
+    <!-- Error Alert -->
+    <div class="container mx-auto px-6 lg:px-12 mb-8 hidden" id="error-msg">
+        <div class="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-l-4 border-red-500 p-6 rounded-2xl shadow-lg flex items-center gap-5">
+            <i class="bi bi-exclamation-triangle-fill text-3xl text-red-500"></i>
+            <div>
+                <h5 class="font-bold text-red-500 text-lg">Rejeição da API do Jira</h5>
+                <span id="error-txt" class="text-sm opacity-80">Sua query JQL contém parâmetros inválidos.</span>
             </div>
         </div>
     </div>
 
-    <div class="container px-lg-5">
-        <div class="row g-4 text-start">
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 lg:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
             <!-- Pessoais Column -->
-            <div class="col-xl-8 col-lg-7">
-
-                <div class="card-custom">
-                    <div class="card-header-styled header-blue">
-                        <i class="bi bi-hourglass-split fs-5"></i> Chamados Aguardando Atendimento
+            <div class="lg:col-span-8 space-y-8">
+                
+                <!-- Aguardando -->
+                <div class="glass-card">
+                    <div class="card-header-styled bg-gradient-to-r from-blue-500 to-cyan-400 text-white">
+                        <i class="bi bi-hourglass-split"></i> 
+                        <span>Chamados Aguardando Atendimento</span>
                     </div>
-                    <div class="card-body p-0">
-                        <table class="table table-borderless mb-0">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
                             <tbody id="pessoais_aguardando">
-                                <!-- Loading state -->
                                 <tr>
-                                    <td class="p-4">
-                                        <div class="skeleton"></div>
-                                        <div class="skeleton w-75 mt-2"></div>
+                                    <td class="p-8">
+                                        <div class="animate-pulse flex flex-col gap-3">
+                                            <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
+                                            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -313,193 +153,173 @@
                     </div>
                 </div>
 
-                <div class="card-custom">
-                    <div class="card-header-styled header-orange">
-                        <i class="bi bi-exclamation-triangle fs-5"></i> SLA Crítico (< 1h) </div>
-                            <div class="card-body p-0">
-                                <table class="table table-borderless mb-0">
-                                    <tbody id="pessoais_sla_critico">
-                                        <tr>
-                                            <td class="p-4">
-                                                <div class="skeleton"></div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                <!-- SLA Crítico -->
+                <div class="glass-card">
+                    <div class="card-header-styled bg-gradient-to-r from-amber-400 to-orange-500 text-white">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        <span>SLA Crítico (< 1h)</span>
                     </div>
-
-                    <div class="card-custom">
-                        <div class="card-header-styled header-gray">
-                            <i class="bi bi-clock-history fs-5"></i> Sem Interação (+3 dias)
-                        </div>
-                        <div class="card-body p-0">
-                            <table class="table table-borderless mb-0">
-                                <tbody id="pessoais_sem_interacao">
-                                    <tr>
-                                        <td class="p-4">
-                                            <div class="skeleton"></div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <tbody id="pessoais_sla_critico">
+                                <tr>
+                                    <td class="p-8"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-
                 </div>
 
-                <!-- Fila DBA Column -->
-                <div class="col-xl-4 col-lg-5">
-                    <div class="card-custom" style="border: 2px solid rgba(255,8,68,0.2);">
-                        <div class="card-header-styled header-red">
-                            <i class="bi bi-fire fs-5"></i> Fila DBA Urgente
-                        </div>
-                        <div class="card-body p-0">
-                            <table class="table table-borderless mb-0">
-                                <tbody id="dba_urgente">
-                                    <tr>
-                                        <td class="p-4">
-                                            <div class="skeleton"></div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <!-- Sem Interação -->
+                <div class="glass-card">
+                    <div class="card-header-styled bg-gradient-to-r from-slate-400 to-slate-600 text-white">
+                        <i class="bi bi-clock-history"></i> 
+                        <span>Sem Interação (+3 dias)</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <tbody id="pessoais_sem_interacao">
+                                <tr>
+                                    <td class="p-8"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fila DBA Column -->
+            <div class="lg:col-span-4">
+                <div class="glass-card ring-2 ring-red-500/20">
+                    <div class="card-header-styled bg-gradient-to-r from-red-600 to-rose-500 text-white">
+                        <i class="bi bi-fire"></i> 
+                        <span>Fila DBA Urgente</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <tbody id="dba_urgente">
+                                <tr>
+                                    <td class="p-8"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </main>
 
-        <footer class="text-center py-4 mt-5 border-top border-opacity-10" style="color: var(--text-muted); font-size: 0.85rem;">
-            ATG Monitor Flow &copy; 2026 | Versão <span class="fw-bold text-primary">0.1.0</span>
-        </footer>
+    <footer class="text-center py-10 mt-12 border-t border-black/5 dark:border-white/5 text-slate-400 text-xs tracking-wide">
+        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.2.0</span>
+    </footer>
 
-        <script>
-            const loadingHtml = '<tr><td class="p-4"><div class="skeleton"></div><div class="skeleton w-50 mt-2"></div></td></tr>';
+    <script>
+        const loadingHtml = `<tr><td class="p-8"><div class="animate-pulse flex flex-col gap-3"><div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-full"></div><div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div></div></td></tr>`;
 
-            async function fetchData() {
-                try {
-                    // Ao buscar os dados, ele sempre enviará a key exata que está selecionada agora no menu
-                    const selectedUser = document.getElementById('user-select').value;
-                    const url = selectedUser ? `/api/data?user=${encodeURIComponent(selectedUser)}` : '/api/data';
+        async function fetchData() {
+            try {
+                const selectedUser = document.getElementById('user-select').value;
+                const url = selectedUser ? `/api/data?user=${encodeURIComponent(selectedUser)}` : '/api/data';
 
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        const errData = await response.json().catch(() => null);
-                        if (errData && errData.error) throw new Error(errData.error);
-                        throw new Error(`Erro HTTP: ${response.status} ${response.statusText}`);
-                    }
-
-                    const data = await response.json();
-                    if (data.error) throw new Error(data.error);
-
-                    updateTable('pessoais_aguardando', data.pessoais_aguardando);
-                    updateTable('pessoais_sla_critico', data.pessoais_sla_critico);
-                    updateTable('pessoais_sem_interacao', data.pessoais_sem_interacao);
-                    updateTable('dba_urgente', data.dba_urgente);
-
-                    document.getElementById('last-update').innerText = 'Sincronizado às ' + new Date().toLocaleTimeString();
-
-                    const errorMsg = document.getElementById('error-msg');
-                    if (errorMsg) errorMsg.style.display = 'none';
-
-                } catch (error) {
-                    console.error('Erro ao buscar dados:', error);
-
-                    const errorMsg = document.getElementById('error-msg');
-                    const errorTxt = document.getElementById('error-txt');
-                    if (errorMsg && errorTxt) {
-                        errorMsg.style.display = 'block';
-                        errorTxt.innerText = error.message;
-                    }
-
-                    const emptyState = '<tr><td class="p-4 text-center text-muted"><i class="bi bi-slash-circle fs-3 d-block mb-2"></i> Falha ao carregar API</td></tr>';
-                    document.getElementById('pessoais_aguardando').innerHTML = emptyState;
-                    document.getElementById('pessoais_sla_critico').innerHTML = emptyState;
-                    document.getElementById('pessoais_sem_interacao').innerHTML = emptyState;
-                    document.getElementById('dba_urgente').innerHTML = emptyState;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    const errData = await response.json().catch(() => null);
+                    if (errData && errData.error) throw new Error(errData.error);
+                    throw new Error(`Erro HTTP: ${response.status}`);
                 }
+
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+
+                updateTable('pessoais_aguardando', data.pessoais_aguardando);
+                updateTable('pessoais_sla_critico', data.pessoais_sla_critico);
+                updateTable('pessoais_sem_interacao', data.pessoais_sem_interacao);
+                updateTable('dba_urgente', data.dba_urgente);
+
+                document.getElementById('last-update').innerText = 'Sincronizado às ' + new Date().toLocaleTimeString();
+                document.getElementById('error-msg').classList.add('hidden');
+
+            } catch (error) {
+                console.error('Erro:', error);
+                const errorMsg = document.getElementById('error-msg');
+                document.getElementById('error-txt').innerText = error.message;
+                errorMsg.classList.remove('hidden');
+
+                const emptyState = '<tr><td class="p-8 text-center text-slate-400 italic">Falha ao carregar API</td></tr>';
+                ['pessoais_aguardando', 'pessoais_sla_critico', 'pessoais_sem_interacao', 'dba_urgente'].forEach(id => {
+                    document.getElementById(id).innerHTML = emptyState;
+                });
+            }
+        }
+
+        function updateTable(id, issues) {
+            const tbody = document.getElementById(id);
+            if (!issues || issues.length === 0) {
+                tbody.innerHTML = `<tr><td class="p-12 text-center text-slate-400/60 bg-white/10"><i class="bi bi-check2-circle text-5xl text-green-500/30 block mb-4"></i><span class="font-semibold">Nenhuma pendência encontrada.</span></td></tr>`;
+                return;
             }
 
-            function updateTable(id, issues) {
-                const tbody = document.getElementById(id);
-                if (!issues || issues.length === 0) {
-                    tbody.innerHTML = '<tr><td class="p-5 text-center text-muted" style="background: rgba(255,255,255,0.3);"><i class="bi bi-check2-circle fs-1 text-success d-block mb-3" style="opacity: 0.5;"></i> <span class="fw-semibold">Nenhuma pendência encontrada.</span></td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = issues.map(issue => `
+            tbody.innerHTML = issues.map(issue => `
                 <tr class="issue-row">
-                    <td class="p-3 px-4 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
-                        <div>
-                            <div class="issue-title">
-                                <span class="badge bg-secondary me-2 rounded-pill px-3 py-2 shadow-sm">${issue.key}</span>
-                                ${issue.summary}
+                    <td class="p-5 px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-1.5">
+                                <span class="bg-slate-500/10 dark:bg-white/10 text-slate-500 dark:text-slate-300 text-[11px] font-bold px-3 py-1 rounded-full border border-black/5 dark:border-white/10">${issue.key}</span>
+                                <h4 class="font-bold text-slate-700 dark:text-slate-200">${issue.summary}</h4>
                             </div>
-                            <div class="issue-meta mt-1"><i class="bi bi-calendar-check me-1"></i> Atualizado na data: ${issue.updated}</div>
+                            <div class="text-[11px] text-slate-400 font-medium flex items-center gap-1.5">
+                                <i class="bi bi-calendar-check"></i> Atualizado: ${issue.updated}
+                            </div>
                         </div>
-                        <a href="${issue.url}" target="_blank" class="btn btn-modern btn-modern-primary text-nowrap">
-                            Abrir <i class="bi bi-box-arrow-up-right ms-1"></i>
+                        <a href="${issue.url}" target="_blank" class="btn-modern bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5 whitespace-nowrap">
+                            Abrir <i class="bi bi-box-arrow-up-right ml-1"></i>
                         </a>
                     </td>
                 </tr>
             `).join('');
-            }
+        }
 
-            function setLoaders() {
-                document.getElementById('pessoais_aguardando').innerHTML = loadingHtml;
-                document.getElementById('pessoais_sla_critico').innerHTML = loadingHtml;
-                document.getElementById('pessoais_sem_interacao').innerHTML = loadingHtml;
-                document.getElementById('dba_urgente').innerHTML = loadingHtml;
-            }
+        function setLoaders() {
+            ['pessoais_aguardando', 'pessoais_sla_critico', 'pessoais_sem_interacao', 'dba_urgente'].forEach(id => {
+                document.getElementById(id).innerHTML = loadingHtml;
+            });
+        }
 
-            // Delay start to allow browser to establish the select menu values
+        setTimeout(fetchData, 400);
+        setInterval(fetchData, 300000);
+
+        async function manualRefresh() {
+            const btn = document.getElementById('btn-refresh');
+            const original = btn.innerHTML;
+            btn.innerHTML = '<div class="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2"></div> Sincronizando...';
+            btn.disabled = true;
             setLoaders();
-            setTimeout(fetchData, 400);
-            setInterval(fetchData, 300000);
+            await fetchData();
+            btn.innerHTML = original;
+            btn.disabled = false;
+        }
 
-            async function manualRefresh() {
-                const btn = document.getElementById('btn-refresh');
-                const originalText = btn.innerHTML;
+        document.getElementById('user-select').addEventListener('change', manualRefresh);
 
-                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sincronizando...';
-                btn.disabled = true;
-
-                setLoaders();
-                await fetchData();
-
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+                document.getElementById('theme-icon').classList.replace('text-blue-500', 'text-yellow-400');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon').classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+                document.getElementById('theme-icon').classList.replace('text-yellow-400', 'text-blue-500');
             }
+            localStorage.setItem('theme', theme);
+        }
 
-            // Alterar o dono reseta e puxa novos tickets instantaneamente
-            document.getElementById('user-select').addEventListener('change', manualRefresh);
+        function toggleTheme() {
+            setTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
+        }
 
-            // --- Gerenciamento de Tema (Dark Mode) ---
-            function setTheme(theme) {
-                document.documentElement.setAttribute('data-bs-theme', theme);
-                localStorage.setItem('theme', theme);
-                const icon = document.getElementById('theme-icon');
-                if (theme === 'dark') {
-                    icon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
-                    icon.classList.add('text-warning');
-                    icon.classList.remove('text-primary');
-                } else {
-                    icon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
-                    icon.classList.remove('text-warning');
-                    icon.classList.add('text-primary');
-                }
-            }
-
-            function toggleTheme() {
-                const currentTheme = document.documentElement.getAttribute('data-bs-theme');
-                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
-            }
-
-            // Inicializar tema
-            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            setTheme(savedTheme);
-        </script>
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        setTheme(savedTheme);
+    </script>
 </body>
-
 </html>

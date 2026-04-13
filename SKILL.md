@@ -14,7 +14,7 @@ description: Regras intransigentes de UI/UX, arquitetura de código e release ma
   - Alertas Críticos mantêm tons inspirados em `rgba(255,8,68,0.2)`.
 
 # 2. Regras de Código 
-- **Frontend / Frameworks**: O padrão moderno, seguro e amplamente aceito na comunidade a ser adotado visando escalabilidade é o **Tailwind CSS**. Atualmente o projeto utiliza Bootstrap 5 legadamente, mas novas implementações arquiteturais devem considerar a padronização e migração gradual utilizando utility-classes modernas do Tailwind.
+- **Frontend / Frameworks**: O padrão moderno, seguro e obrigatório é o **Tailwind CSS**. Utility-first classes devem ser usadas para todo o layout, garantindo consistência, performance e facilidade de manutenção. O uso de Bootstrap ou outros frameworks legados está proibido para novas implementações e refatorações.
 - **Backend / Python**: Todo código backend deve possuir `try/catch` explícitos e registrar as saídas no sistema de logging base. 
 
 # 3. Regras de Controle de Versão e Deployment
