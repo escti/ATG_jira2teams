@@ -11,15 +11,15 @@ Este documento serve como um guia rápido detalhado da estrutura interna do proj
 ### `app.py`
 - **Descrição:** Servidor web principal baseado em Flask. Responsável por hospedar a interface web e servir os dados via API.
 - **Rotas:**
-  - `/`: Renderiza o `index.html`. Lê a variável `JIRA_DASHBOARD_USERS` do `.env` para popular o dropdown de multiusuários.
+  - `/`: Renderiza o `index.html`. Extrai inteligentemente o prefixo do `JIRA_USERNAME` para não forçar o usuário a digitar na primeira carga.
   - `/api/data`: Endpoint consumido pelo frontend para buscar os chamados atualizados via `jira_service.py`.
 
 ### `jira_service.py`
 - **Descrição:** Classe de integração e inteligência (`JiraClient`) que faz as chamadas HTTP para a API v3 do Jira Cloud.
 - **Lógica Principal:**
   - `run_jql_query()`: Executa queries (tenta endpoint primário e fallback) com tratamento de erro e logs de auditoria no terminal.
-  - `get_dashboard_data()`: Centraliza as 4 queries JQL principais do sistema.
-  - **Mapeamento de Usuário:** Contém a inteligência que converte o nome curto do dropdown (ex: `thiago`) para o e-mail completo configurado no `.env` (ex: `thiago.albuquerque@...`), garantindo que o Jira sempre encontre o `assignee` correto.
+  - `get_dashboard_data()`: Centraliza as 6 queries JQL principais do sistema (Sustentação, SLA, Finalizados, Sem Interação, DBA e Projetos Ativos) e agora injeta o "statusCategory" dinamicamente no retorno.
+  - **Mapeamento de Usuário:** O sistema agora é dinâmico, recebendo e-mails inteiros (ex: `thiago.albuquerque`) do input de texto para mapear o `assignee` com precisão, ao invés de usar dropdowns estáticos.
 
 ### `jira_to_teams.py`
 - **Descrição:** Script autônomo (daemon) para envio de notificações ativas para o Microsoft Teams.
@@ -34,8 +34,11 @@ Este documento serve como um guia rápido detalhado da estrutura interna do proj
 ### `templates/index.html`
 - **Descrição:** Single Page Application (SPA) do Dashboard Web.
 - **Tecnologias:** HTML5, Tailwind CSS (via CDN) e Vanilla JavaScript. Sem uso de bibliotecas legadas.
-- **Design:** Segue estritamente as regras de UI/UX do `SKILL.md` (Glassmorphism, Dark Mode obrigatório, tipografia moderna).
-- **Lógica JS:** Faz pooling via `fetch` para a rota `/api/data`, controla auto-refresh a cada 5 minutos e gerencia os estados de carregamento (Skeleton Loaders) da UI.
+- **Design e UI/UX:** 
+  - Segue estritamente as regras de UI/UX do `SKILL.md` (Glassmorphism, Dark Mode obrigatório, tipografia moderna).
+  - Possui um inovador **Sistema de Abas (Tabs)** dinâmicas e Layout **Masonry** via CSS Columns, evitando que o empilhamento vertical prejudique o layout.
+  - Apresenta interações inteligentes como contadores em tempo real e tags de status nativamente coloridas de acordo com as chaves do Jira.
+- **Lógica JS:** Faz pooling via `fetch` para a rota `/api/data`, controla auto-refresh dinâmico (5 a 60min) e gerencia os estados de carregamento.
 
 ---
 

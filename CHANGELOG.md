@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-04-19
+### Added
+- Separação de Projetos: Criada uma query específica para projetos (TIC e GPM), excluindo-os nativamente das filas de sustentação diária via JQL `project IN`.
+- Novo Layout UX via Sistema de Abas (Tabs): As filas foram divididas em 3 abas (Sustentação & DBA, Projetos Ativos, Finalizados).
+- Layout Masonry (Colunas Fluidas): A Aba de Sustentação teve sua grid ajustada para colunas independentes para evitar buracos verticais no agrupamento dos cards.
+- Status Dinâmico e Colorido: Extração do `statusCategory` do Jira (new, indeterminate, done) renderizando cores dinâmicas para o badge do status do chamado na tela.
+- Contadores dinâmicos ao lado do título de cada aba mostrando a contagem de tickets daquela fila em tempo real.
+
+### Changed
+- Refatoração do campo de Usuário (Jira User): O sistema agora recorta apenas a extensão (domínio) e carrega o nome do usuário completo automaticamente ao abrir.
+- O card de "Fila DBA Urgente" perdeu sua coluna lateral fixa e foi internalizado na primeira posição da Aba Sustentação.
+
 ## [0.3.0] - 2026-04-19
 ### Added
 - Colapsabilidade nos agrupamentos de chamados (Cards) via clique no título com transição de ícones (chevron).

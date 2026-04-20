@@ -12,14 +12,13 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
 ## 🚀 Funcionalidades
 
 ### **1. Dashboard Web**
-- Interface moderna baseada em Bootstrap 5
-- 4 cartões de monitoramento:
-  - ⏳ Chamados Aguardando Atendimento
-  - ⚠️ SLA Crítico (< 1h)
-  - 🕰️ Sem Interação (+3 dias)
-  - 🔥 Fila DBA Urgente
-- Multiusuário com dropdown
-- Auto-refresh e controles manuais
+- Interface fluida com **Sistema de Abas (Tabs)** e layout **Masonry** (Colunas dinâmicas).
+- Suporte nativo ao Dark Mode usando Tailwind CSS.
+- Abas de monitoramento:
+  - 🕒 **Sustentação & DBA**: Aguardando Atendimento, SLA Crítico (< 1h), Sem Interação (+3 dias) e DBA Urgente.
+  - 🚀 **Projetos Ativos**: Chamados específicos de escopos de projeto (TIC/GPM).
+  - ✅ **Finalizados**: Histórico visual do que foi entregue no mês.
+- Multiusuário com input livre de e-mail e auto-refresh dinâmico (5 a 60 minutos).
 
 ### **2. Script Teams**
 - Envia notificações automáticas para o Microsoft Teams
@@ -177,11 +176,12 @@ O sistema substitui dinamicamente a função `currentUser()` do Jira pelo nome d
 
 ### Exemplos de Queries:
 
-| Card | Query |
+| Card | Query (simplificada) |
 |------|-------|
-| **Aguardando** | `assignee = 'user' AND statusCategory != Done` |
+| **Aguardando** | `assignee = 'user' AND project NOT IN (...) AND statusCategory != Done` |
 | **SLA Crítico** | `assignee = 'user' AND "Tempo de resolução" <= remaining("1h")` |
 | **Sem Interação** | `assignee = 'user' AND updatedDate <= "-3d"` |
+| **Projetos Ativos** | `assignee = 'user' AND project IN (TIC, GPM)` |
 | **Fila DBA** | `assignee IS EMPTY AND "Grupo Solucionador" = "DC - Banco de Dados"` |
 
 ---
