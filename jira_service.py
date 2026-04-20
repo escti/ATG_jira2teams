@@ -66,10 +66,12 @@ class JiraClient:
             assignee_email = self.username
         
         queries = {
-            "pessoais_aguardando": f"assignee = '{assignee_email}' AND resolution = Unresolved AND status NOT IN (Concluído, Backlog, Cancelado) ORDER BY status DESC, updated ASC, 'Tempo de resolução' DESC",
-            "pessoais_sla_critico": f"assignee = '{assignee_email}' AND statusCategory != Done AND updated <= endOfYear() AND 'Tempo de resolução' != paused() AND 'Tempo de resolução' <= remaining('1h')",
-            "pessoais_sem_interacao": f"assignee = '{assignee_email}' AND statusCategory != Done and updatedDate <= '-3d' ORDER BY updatedDate ASC",
-            "dba_urgente": "assignee IS EMPTY AND 'Grupo Solucionador[Group Picker (single group)]' = 'DC - Banco de Dados (DBA)' AND statusCategory != Done AND ('Tempo de Primeira Resposta' = breached() OR 'Tempo de Primeira Resposta' <= remaining('1h'))"
+            "pessoais_aguardando": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND resolution = Unresolved AND status not in (Concluído,Backlog,Cancelado) ORDER BY status desc, updated ASC, 'Tempo de resolução' DESC",
+            "pessoais_sla_critico": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND statusCategory != Done AND updated <= endOfYear() AND 'Tempo de resolução' != paused() AND 'Tempo de resolução' <= remaining('1h')",
+            "pessoais_sem_interacao": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND statusCategory != Done and updatedDate <= '-3d' ORDER BY updatedDate ASC",
+            "pessoais_projetos": f"assignee = '{assignee_email}' AND project IN (TIC, GPM) AND resolution = Unresolved AND status NOT IN (Concluído, Backlog, Cancelado) ORDER BY status DESC, updated ASC",
+            "pessoais_finalizados_mes": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND resolution = done AND status not in (Concluído, Backlog, Cancelado) AND resolved >= startOfMonth() ORDER BY created DESC, status DESC, updated ASC, 'Tempo de resolução' DESC",
+            "dba_urgente": 'assignee = empty AND project NOT IN (TIC, GPM) AND status NOT IN (Done, "Concluído(a)", Encerrado, Cancelado, Canceled, Reprovado, "Aguardando Aprovação") AND "grupo solucionador[group picker (single group)]" = "DC - Banco de Dados (DBA)" ORDER BY cf[10321] ASC, created DESC'
         }
         
         results = {}
@@ -86,9 +88,19 @@ class JiraClient:
     def _format_issues(self, issues):
         formatted = []
         for issue in issues:
+            status_name = "Desconhecido"
+            status_category = "new"
+            
+            if "status" in issue["fields"] and issue["fields"]["status"]:
+                status_name = issue["fields"]["status"]["name"]
+                if "statusCategory" in issue["fields"]["status"]:
+                    status_category = issue["fields"]["status"]["statusCategory"].get("key", "new")
+                
             formatted.append({
                 "key": issue["key"],
                 "summary": issue["fields"]["summary"],
+                "status": status_name,
+                "status_category": status_category,
                 "updated": issue["fields"]["updated"][:10],
                 "url": f"{self.server}/browse/{issue['key']}"
             })

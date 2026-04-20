@@ -58,7 +58,9 @@ def pull_and_send_notifications():
         sections_config = [
             {"key": "pessoais_aguardando", "title": "⏳ Chamados Aguardando Atendimento"},
             {"key": "pessoais_sla_critico", "title": "⚠️ Chamados que o SLA Vai Estourar em 1h ou menos"},
-            {"key": "pessoais_sem_interacao", "title": "🕰️ Chamados Sem Interação a Mais de 3 Dias"}
+            {"key": "pessoais_sem_interacao", "title": "🕰️ Chamados Sem Interação a Mais de 3 Dias"},
+            {"key": "pessoais_projetos", "title": "🚀 Projetos Ativos (TIC/GPM)"},
+            {"key": "pessoais_finalizados_mes", "title": "✅ Chamados Finalizados (Este Mês)"}
         ]
 
         for config in sections_config:

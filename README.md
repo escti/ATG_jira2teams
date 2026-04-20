@@ -131,6 +131,9 @@ docker-compose logs -f jira-notifier
 
 ## 🔧 Estrutura do Projeto
 
+Para facilitar o entendimento profundo da arquitetura, criamos um mapa detalhado. 
+👉 **Consulte o arquivo [FILE_MAP.md](FILE_MAP.md)** para ver a explicação de lógica, funções e métodos de cada um dos arquivos abaixo.
+
 ```
 ATG_jira2teams/
 ├── app.py                      # Backend Flask (Web)
@@ -143,7 +146,8 @@ ATG_jira2teams/
 ├── Dockerfile                  # Build base para python e deps OCI
 ├── requirements.txt            # Dependências unificadas Python
 ├── .env.example                # Exemplo de configuração unificada
-└── README.md                   # Este arquivo (Documentação Unificada)
+├── README.md                   # Documentação Unificada
+└── FILE_MAP.md                 # 🗺️ Mapa detalhado de contexto para IA e Devs
 ```
 
 ---
