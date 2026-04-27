@@ -5,7 +5,7 @@ from datetime import datetime
 import pytz
 import logging
 import json
-from jira_service import JiraClient
+from src.jira_service import JiraClient
 
 # Configurar logging
 logging.basicConfig(

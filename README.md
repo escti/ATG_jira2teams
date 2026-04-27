@@ -42,36 +42,21 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
 
 ---
 
-## 🛠️ Instalação (Recomendado via Docker na OCI)
+## 🛠️ Instalação (Produção na OCI)
 
-Este projeto é preparado para o Docker Compose, especialmente com host Oracle Linux 8. 
+O sistema conta com uma esteira de deploy 100% automatizada. Para instalar ou atualizar o sistema no servidor de produção (Oracle Linux), um humano precisa executar apenas 1 comando:
 
-### **1. Clonar o repositório**
-No servidor que hospedará a aplicação:
 ```bash
-cd ~
-git clone https://github.com/escti/ATG_jira2teams.git
-cd ATG_jira2teams
+curl -sSL https://raw.githubusercontent.com/escti/ATG_jira2teams/main/deploy.sh | bash
 ```
 
-### **2. Configurar variáveis de ambiente**
-Copie o arquivo de exemplo:
-```bash
-cp .env.example .env
-```
-Edite o arquivo `.env` com suas credenciais (ajustando a URL do painel Webhook e conta do JIRA):
-```env
-JIRA_SERVER=https://jira.suaempresa.com.br
-JIRA_USERNAME=usuario@escti.com
-JIRA_PASSWORD=seu_token_aqui
-TEAMS_WEBHOOK_URL=https://outlook.office.com/webhook/...
-```
+**O que o script faz sozinho:**
+1. Instala Git e Docker (se não existirem)
+2. Clona ou sincroniza o repositório (`git reset --hard`)
+3. Valida a existência do arquivo `.env` de segurança
+4. Destrói containers antigos, recria a build com as novas modificações e limpa o lixo de memória do Docker
 
-### **3. Iniciar a stack de acompanhamento**
-```bash
-docker-compose up -d
-```
-Verifique se tudo está OK com `docker-compose ps`.
+*(Atenção: Na primeira vez, o script irá pausar pedindo que você edite o `.env` com seu Token do Jira antes de prosseguir).*
 
 ---
 
@@ -79,8 +64,8 @@ Verifique se tudo está OK com `docker-compose ps`.
 Caso não queira rodar em containers para criar testes na própria máquina:
 1. `pip install -r requirements.txt`
 2. `copy .env.example .env` e o edite.
-3. Para UI web: `python app.py`
-4. Para fluxo bot: `python jira_to_teams.py`
+3. Para UI web: `python src/app.py`
+4. Para fluxo bot: `python src/jira_to_teams.py`
 
 ---
 
@@ -135,12 +120,13 @@ Para facilitar o entendimento profundo da arquitetura, criamos um mapa detalhado
 
 ```
 ATG_jira2teams/
-├── app.py                      # Backend Flask (Web)
-├── jira_service.py             # Lógica integrada de conexão com Jira
-├── jira_to_teams.py            # Loop Bot do Teams
-├── _old/                       # Pasta com docs e versões antigas de scripts
-├── templates/
-│   └── index.html              # Frontend Web
+├── docs/                       # Documentações de setup e versões antigas
+├── src/                        # Código-fonte da aplicação
+│   ├── app.py                  # Backend Flask (Web)
+│   ├── jira_service.py         # Lógica integrada de conexão com Jira
+│   ├── jira_to_teams.py        # Loop Bot do Teams
+│   └── templates/
+│       └── index.html          # Frontend Web
 ├── docker-compose.yml          # Setup da Stack na OCI
 ├── Dockerfile                  # Build base para python e deps OCI
 ├── requirements.txt            # Dependências unificadas Python
