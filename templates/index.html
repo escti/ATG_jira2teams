@@ -76,24 +76,30 @@
 
 <body class="text-slate-800 dark:text-slate-100 pb-12">
     <!-- Navbar -->
-    <nav class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-white/20 dark:border-white/5 shadow-sm py-4 mb-8">
+    <nav
+        class="sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-white/20 dark:border-white/5 shadow-sm py-4 mb-8">
         <div class="container mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <i class="bi bi-kanban text-3xl align-middle bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent"></i>
-                <span class="text-2xl font-bold tracking-tight bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">
+                <i
+                    class="bi bi-kanban text-3xl align-middle bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent"></i>
+                <span
+                    class="text-2xl font-bold tracking-tight bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">
                     ATG Monitor Flow
                 </span>
             </div>
 
             <div class="flex flex-wrap items-center justify-center gap-4 lg:gap-6">
                 <div class="hidden sm:block text-right">
-                    <div id="last-update" class="text-[10px] uppercase font-bold tracking-widest text-slate-400">Atualizando...</div>
+                    <div id="last-update" class="text-[10px] uppercase font-bold tracking-widest text-slate-400">
+                        Atualizando...</div>
                 </div>
 
                 <div class="flex flex-col items-center">
-                    <div class="flex items-center bg-white dark:bg-zinc-800 p-1 px-3 rounded-full shadow-sm border border-black/5 dark:border-white/5">
+                    <div
+                        class="flex items-center bg-white dark:bg-zinc-800 p-1 px-3 rounded-full shadow-sm border border-black/5 dark:border-white/5">
                         <i class="bi bi-clock-history text-slate-400 mr-2 text-sm"></i>
-                        <select id="refresh-interval" class="bg-transparent border-0 font-bold text-sm text-slate-600 dark:text-slate-300 focus:ring-0 cursor-pointer outline-none">
+                        <select id="refresh-interval"
+                            class="bg-transparent border-0 font-bold text-sm text-slate-600 dark:text-slate-300 focus:ring-0 cursor-pointer outline-none">
                             <option value="300000" class="dark:bg-zinc-900" selected>5 min</option>
                             <option value="600000" class="dark:bg-zinc-900">10 min</option>
                             <option value="900000" class="dark:bg-zinc-900">15 min</option>
@@ -105,25 +111,35 @@
                 </div>
 
                 <div class="flex flex-col items-center">
-                    <button id="btn-refresh" onclick="manualRefresh()" class="flex items-center gap-2 bg-white dark:bg-zinc-800 text-slate-700 dark:text-slate-200 px-6 py-2 rounded-full font-bold shadow-sm border border-black/5 dark:border-white/5 hover:shadow-md transition-all active:scale-95">
+                    <button id="btn-refresh" onclick="manualRefresh()"
+                        class="flex items-center gap-2 bg-white dark:bg-zinc-800 text-slate-700 dark:text-slate-200 px-6 py-2 rounded-full font-bold shadow-sm border border-black/5 dark:border-white/5 hover:shadow-md transition-all active:scale-95">
                         <i class="bi bi-arrow-clockwise"></i> Sincronizar
                     </button>
                     <span class="text-[9px] text-slate-400 mt-1">Atualizar agora</span>
                 </div>
 
                 <div class="flex flex-col items-start">
-                    <div class="flex items-center bg-white dark:bg-zinc-800 p-1 pr-4 rounded-full shadow-sm border border-black/5 dark:border-white/5 w-full">
+                    <div
+                        class="flex items-center bg-white dark:bg-zinc-800 p-1 pr-4 rounded-full shadow-sm border border-black/5 dark:border-white/5 w-full">
                         <div class="bg-blue-50 dark:bg-blue-900/30 rounded-full p-2 px-3 mr-2 text-blue-500">
                             <i class="bi bi-person-fill"></i>
                         </div>
-                        <span class="hidden md:inline text-xs font-bold text-slate-400 uppercase tracking-tighter mr-2">Jira User:</span>
-                        <input type="text" id="user-input" value="{{ users[0] }}" class="bg-transparent border-0 font-bold text-sm focus:ring-0 outline-none w-[350px] placeholder-slate-400" placeholder="Digite o usuário ou email..." autocomplete="off" spellcheck="false" title="Pressione Enter para buscar" />
+                        <span
+                            class="hidden md:inline text-xs font-bold text-slate-400 uppercase tracking-tighter mr-2">Jira
+                            User:</span>
+                        <input type="text" id="user-input" value="{{ users[0] }}"
+                            class="bg-transparent border-0 font-bold text-sm focus:ring-0 outline-none w-[350px] placeholder-slate-400"
+                            placeholder="Digite o usuário ou email..." autocomplete="off" spellcheck="false"
+                            title="Pressione Enter para buscar" />
                     </div>
-                    <span class="text-[10px] text-slate-400 mt-1 pl-4">Digite o usuário e aperte Enter. Ex.: thiago.albuquerque</span>
+                    <span class="text-[10px] text-slate-400 mt-1 pl-4">Digite o usuário e aperte Enter. Ex.:
+                        thiago.albuquerque</span>
                 </div>
 
-                <button id="btn-theme" onclick="toggleTheme()" class="bg-white dark:bg-zinc-800 p-2.5 px-4 rounded-full shadow-sm border border-black/5 dark:border-white/5 transition-colors group">
-                    <i class="bi bi-moon-stars-fill text-blue-500 group-hover:text-blue-400 transition-colors" id="theme-icon"></i>
+                <button id="btn-theme" onclick="toggleTheme()"
+                    class="bg-white dark:bg-zinc-800 p-2.5 px-4 rounded-full shadow-sm border border-black/5 dark:border-white/5 transition-colors group">
+                    <i class="bi bi-moon-stars-fill text-blue-500 group-hover:text-blue-400 transition-colors"
+                        id="theme-icon"></i>
                 </button>
             </div>
         </div>
@@ -131,7 +147,8 @@
 
     <!-- Error Alert -->
     <div class="container mx-auto px-6 lg:px-12 mb-8 hidden" id="error-msg">
-        <div class="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-l-4 border-red-500 p-6 rounded-2xl shadow-lg flex items-center gap-5">
+        <div
+            class="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-l-4 border-red-500 p-6 rounded-2xl shadow-lg flex items-center gap-5">
             <i class="bi bi-exclamation-triangle-fill text-3xl text-red-500"></i>
             <div>
                 <h5 class="font-bold text-red-500 text-lg">Rejeição da API do Jira</h5>
@@ -142,36 +159,45 @@
 
     <!-- Main Content -->
     <main class="container mx-auto px-6 lg:px-12">
-        
+
         <!-- Tabs Navigation -->
         <div class="flex flex-wrap border-b border-black/10 dark:border-white/10 mb-6 gap-2">
-            <button onclick="switchTab('tab-sustentacao')" id="btn-tab-sustentacao" class="px-6 py-3 font-bold text-sm text-blue-600 border-b-2 border-blue-600 transition-all">
+            <button onclick="switchTab('tab-sustentacao')" id="btn-tab-sustentacao"
+                class="px-6 py-3 font-bold text-sm text-blue-600 border-b-2 border-blue-600 transition-all">
                 🕒 Sustentação & DBA
             </button>
-            <button onclick="switchTab('tab-projetos')" id="btn-tab-projetos" class="px-6 py-3 font-semibold text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-b-2 border-transparent transition-all">
+            <button onclick="switchTab('tab-projetos')" id="btn-tab-projetos"
+                class="px-6 py-3 font-semibold text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-b-2 border-transparent transition-all">
                 🚀 Projetos Ativos
             </button>
-            <button onclick="switchTab('tab-finalizados')" id="btn-tab-finalizados" class="px-6 py-3 font-semibold text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-b-2 border-transparent transition-all">
+            <button onclick="switchTab('tab-finalizados')" id="btn-tab-finalizados"
+                class="px-6 py-3 font-semibold text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 border-b-2 border-transparent transition-all">
                 ✅ Finalizados (Mês)
             </button>
         </div>
 
         <!-- TAB 1: SUSTENTAÇÃO -->
         <div id="tab-sustentacao" class="columns-1 lg:columns-2 gap-6">
-            
+
             <!-- Fila DBA Urgente -->
             <div class="glass-card ring-2 ring-red-500/20 break-inside-avoid mb-6">
-                <div class="card-header-styled bg-gradient-to-r from-red-600 to-rose-500 text-white cursor-pointer hover:opacity-90 justify-between" onclick="toggleCard('body_dba', 'icon_dba')" title="Clique para expandir/recolher">
+                <div class="card-header-styled bg-gradient-to-r from-red-600 to-rose-500 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_dba', 'icon_dba')" title="Clique para expandir/recolher">
                     <div class="flex items-center gap-2.5">
-                        <i class="bi bi-fire"></i> 
-                        <span class="text-base flex items-center">Fila DBA Urgente <span id="count-dba_urgente" class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
+                        <i class="bi bi-fire"></i>
+                        <span class="text-base flex items-center">Fila DBA Urgente <span id="count-dba_urgente"
+                                class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
                     </div>
                     <i id="icon_dba" class="bi bi-chevron-up opacity-80"></i>
                 </div>
                 <div id="body_dba" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <tbody id="dba_urgente">
-                            <tr><td class="p-4"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td></tr>
+                            <tr>
+                                <td class="p-4">
+                                    <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -179,17 +205,24 @@
 
             <!-- SLA Crítico -->
             <div class="glass-card break-inside-avoid mb-6">
-                <div class="card-header-styled bg-gradient-to-r from-amber-400 to-orange-500 text-white cursor-pointer hover:opacity-90 justify-between" onclick="toggleCard('body_sla', 'icon_sla')" title="Clique para expandir/recolher">
+                <div class="card-header-styled bg-gradient-to-r from-amber-400 to-orange-500 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_sla', 'icon_sla')" title="Clique para expandir/recolher">
                     <div class="flex items-center gap-2.5">
-                        <i class="bi bi-exclamation-triangle"></i> 
-                        <span class="text-base flex items-center">SLA Crítico (< 1h) <span id="count-pessoais_sla_critico" class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <span class="text-base flex items-center">SLA Crítico (< 1h) <span
+                                id="count-pessoais_sla_critico"
+                                class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
                     </div>
                     <i id="icon_sla" class="bi bi-chevron-up opacity-80"></i>
                 </div>
                 <div id="body_sla" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <tbody id="pessoais_sla_critico">
-                            <tr><td class="p-4"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td></tr>
+                            <tr>
+                                <td class="p-4">
+                                    <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -197,17 +230,24 @@
 
             <!-- Aguardando -->
             <div class="glass-card break-inside-avoid mb-6">
-                <div class="card-header-styled bg-gradient-to-r from-blue-500 to-cyan-400 text-white cursor-pointer hover:opacity-90 justify-between" onclick="toggleCard('body_aguardando', 'icon_aguardando')" title="Clique para expandir/recolher">
+                <div class="card-header-styled bg-gradient-to-r from-blue-500 to-cyan-400 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_aguardando', 'icon_aguardando')" title="Clique para expandir/recolher">
                     <div class="flex items-center gap-2.5">
-                        <i class="bi bi-hourglass-split"></i> 
-                        <span class="text-base flex items-center">Aguardando Atendimento <span id="count-pessoais_aguardando" class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
+                        <i class="bi bi-hourglass-split"></i>
+                        <span class="text-base flex items-center">Aguardando Atendimento <span
+                                id="count-pessoais_aguardando"
+                                class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
                     </div>
                     <i id="icon_aguardando" class="bi bi-chevron-up opacity-80"></i>
                 </div>
                 <div id="body_aguardando" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <tbody id="pessoais_aguardando">
-                            <tr><td class="p-4"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td></tr>
+                            <tr>
+                                <td class="p-4">
+                                    <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -215,17 +255,24 @@
 
             <!-- Sem Interação -->
             <div class="glass-card break-inside-avoid mb-6">
-                <div class="card-header-styled bg-gradient-to-r from-slate-400 to-slate-600 text-white cursor-pointer hover:opacity-90 justify-between" onclick="toggleCard('body_sem_int', 'icon_sem_int')" title="Clique para expandir/recolher">
+                <div class="card-header-styled bg-gradient-to-r from-slate-400 to-slate-600 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_sem_int', 'icon_sem_int')" title="Clique para expandir/recolher">
                     <div class="flex items-center gap-2.5">
-                        <i class="bi bi-clock-history"></i> 
-                        <span class="text-base flex items-center">Sem Interação (+3 dias) <span id="count-pessoais_sem_interacao" class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
+                        <i class="bi bi-clock-history"></i>
+                        <span class="text-base flex items-center">Sem Interação (+3 dias) <span
+                                id="count-pessoais_sem_interacao"
+                                class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
                     </div>
                     <i id="icon_sem_int" class="bi bi-chevron-up opacity-80"></i>
                 </div>
                 <div id="body_sem_int" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <tbody id="pessoais_sem_interacao">
-                            <tr><td class="p-4"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td></tr>
+                            <tr>
+                                <td class="p-4">
+                                    <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -235,17 +282,24 @@
         <!-- TAB 2: PROJETOS ATIVOS -->
         <div id="tab-projetos" class="hidden">
             <div class="glass-card border-blue-500/20">
-                <div class="card-header-styled bg-gradient-to-r from-indigo-500 to-purple-500 text-white cursor-pointer hover:opacity-90 justify-between" onclick="toggleCard('body_projetos', 'icon_projetos')" title="Clique para expandir/recolher">
+                <div class="card-header-styled bg-gradient-to-r from-indigo-500 to-purple-500 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_projetos', 'icon_projetos')" title="Clique para expandir/recolher">
                     <div class="flex items-center gap-2.5">
-                        <i class="bi bi-rocket-takeoff"></i> 
-                        <span class="text-base flex items-center">Projetos Ativos (TIC/GPM) <span id="count-pessoais_projetos" class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
+                        <i class="bi bi-rocket-takeoff"></i>
+                        <span class="text-base flex items-center">Projetos Ativos (TIC/GPM) <span
+                                id="count-pessoais_projetos"
+                                class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
                     </div>
                     <i id="icon_projetos" class="bi bi-chevron-up opacity-80"></i>
                 </div>
                 <div id="body_projetos" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <tbody id="pessoais_projetos">
-                            <tr><td class="p-4"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td></tr>
+                            <tr>
+                                <td class="p-4">
+                                    <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -255,17 +309,24 @@
         <!-- TAB 3: FINALIZADOS -->
         <div id="tab-finalizados" class="hidden">
             <div class="glass-card border-green-500/20">
-                <div class="card-header-styled bg-gradient-to-r from-emerald-400 to-green-500 text-white cursor-pointer hover:opacity-90 justify-between" onclick="toggleCard('body_finalizados', 'icon_finalizados')" title="Clique para expandir/recolher">
+                <div class="card-header-styled bg-gradient-to-r from-emerald-400 to-green-500 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_finalizados', 'icon_finalizados')" title="Clique para expandir/recolher">
                     <div class="flex items-center gap-2.5">
-                        <i class="bi bi-check2-all"></i> 
-                        <span class="text-base flex items-center">Chamados Finalizados (Este Mês) <span id="count-pessoais_finalizados_mes" class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
+                        <i class="bi bi-check2-all"></i>
+                        <span class="text-base flex items-center">Chamados Finalizados (Este Mês) <span
+                                id="count-pessoais_finalizados_mes"
+                                class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
                     </div>
                     <i id="icon_finalizados" class="bi bi-chevron-up opacity-80"></i>
                 </div>
                 <div id="body_finalizados" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <tbody id="pessoais_finalizados_mes">
-                            <tr><td class="p-4"><div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div></td></tr>
+                            <tr>
+                                <td class="p-4">
+                                    <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -274,7 +335,8 @@
 
     </main>
 
-    <footer class="text-center py-10 mt-12 border-t border-black/5 dark:border-white/5 text-slate-400 text-xs tracking-wide">
+    <footer
+        class="text-center py-10 mt-12 border-t border-black/5 dark:border-white/5 text-slate-400 text-xs tracking-wide">
         ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.4.0</span>
     </footer>
 
@@ -328,7 +390,7 @@
         function updateTable(id, issues) {
             const tbody = document.getElementById(id);
             const countSpan = document.getElementById('count-' + id);
-            
+
             if (countSpan) {
                 countSpan.innerText = issues ? issues.length : 0;
             }
@@ -373,13 +435,13 @@
             refreshTimer = setInterval(fetchData, interval);
         }
 
-        document.getElementById('refresh-interval').addEventListener('change', function() {
+        document.getElementById('refresh-interval').addEventListener('change', function () {
             startAutoRefresh();
             manualRefresh();
         });
 
         const userInput = document.getElementById('user-input');
-        userInput.addEventListener('keypress', function(e) {
+        userInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 userInput.blur();
                 manualRefresh();
@@ -425,7 +487,7 @@
         function toggleCard(bodyId, iconId) {
             const body = document.getElementById(bodyId);
             const icon = document.getElementById(iconId);
-            
+
             if (body.classList.contains('hidden')) {
                 body.classList.remove('hidden');
                 icon.classList.replace('bi-chevron-down', 'bi-chevron-up');
@@ -443,7 +505,7 @@
                 btn.classList.remove('text-blue-600', 'border-blue-600', 'font-bold');
                 btn.classList.add('text-slate-500', 'border-transparent', 'font-semibold');
             });
-            
+
             document.getElementById(activeTabId).classList.remove('hidden');
             const activeBtn = document.getElementById('btn-' + activeTabId);
             activeBtn.classList.add('text-blue-600', 'border-blue-600', 'font-bold');
@@ -451,4 +513,5 @@
         }
     </script>
 </body>
+
 </html>
