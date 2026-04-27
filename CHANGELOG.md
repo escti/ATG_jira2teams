@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-04-27
+### Changed
+- **Reestruturação Arquitetural**: Código-fonte migrado para a pasta `src/` e arquivos legados movidos para `docs/`, seguindo as melhores práticas do ecossistema Python.
+- Atualização do `Dockerfile` e `docker-compose.yml` para mapear os novos caminhos do backend.
+- Simplificação da esteira de deploy no `README.md` (One-liner install).
+- Reforço do prompt de IA no `FILE_MAP.md` exigindo o cumprimento estrito do `SKILL.md`.
+
 ## [0.4.2] - 2026-04-27
 ### Fixed
 - Reordenação da "Fila DBA Urgente" para priorizar os tickets pelo Tempo de Resolução (SLA), do mais crítico (menor tempo) para o menos crítico.
