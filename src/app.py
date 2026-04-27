@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request
-from src.jira_service import JiraClient
+from jira_service import JiraClient
 import os
 import requests
 from dotenv import load_dotenv
