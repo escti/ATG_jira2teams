@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2026-04-27
+### Fixed
+- Reordenação da "Fila DBA Urgente" para priorizar os tickets pelo Tempo de Resolução (SLA), do mais crítico (menor tempo) para o menos crítico.
+
 ## [0.4.1] - 2026-04-27
 ### Fixed
 - Correção de sobreposição na fila "Aguardando Atendimento" com a exclusão explícita do status `PENDENTE EXTERNO`.
