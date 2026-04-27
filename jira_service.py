@@ -67,7 +67,7 @@ class JiraClient:
         
         queries = {
             "pessoais_aguardando": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND resolution = Unresolved AND status not in (Concluído, Backlog, Cancelado, 'PENDENTE EXTERNO') ORDER BY status desc, updated ASC, 'Tempo de resolução' DESC",
-            "pessoais_sla_critico": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND statusCategory != Done AND updated <= endOfYear() AND 'Tempo de resolução' != paused() AND 'Tempo de resolução' <= remaining('1h')",
+            "pessoais_sla_critico": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND status IN ('Em atendimento', 'Aguardando atendimento') AND updated <= endOfYear() AND 'Tempo de resolução' != paused() AND 'Tempo de resolução' <= remaining('1h') ORDER BY 'Tempo de resolução' ASC",
             "pessoais_sem_interacao": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND statusCategory != Done and updatedDate <= '-3d' ORDER BY updatedDate ASC",
             "pessoais_projetos": f"assignee = '{assignee_email}' AND project IN (TIC, GPM) AND resolution = Unresolved AND status NOT IN (Concluído, Backlog, Cancelado) ORDER BY status DESC, updated ASC",
             "pessoais_finalizados_mes": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND resolution = done AND status not in (Concluído, Backlog, Cancelado) AND resolved >= startOfMonth() ORDER BY created DESC, status DESC, updated ASC, 'Tempo de resolução' DESC",
