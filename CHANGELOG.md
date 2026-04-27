@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-04-27
+### Fixed
+- Correção de sobreposição na fila "Aguardando Atendimento" com a exclusão explícita do status `PENDENTE EXTERNO`.
+- Ajuste na fila "SLA Crítico (< 1h)" limitando o escopo estritamente aos status `Em atendimento` e `Aguardando atendimento`.
+- Padronização da ordenação das filas ("Aguardando Atendimento", "Sem Interação" e "Projetos Ativos") para `Status`, `Tempo de resolução` (SLA) e Data de Atualização (`updated`).
+
 ## [0.4.0] - 2026-04-19
 ### Added
 - Separação de Projetos: Criada uma query específica para projetos (TIC e GPM), excluindo-os nativamente das filas de sustentação diária via JQL `project IN`.
