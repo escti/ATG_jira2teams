@@ -7,6 +7,9 @@ import logging
 import json
 from jira_service import JiraClient
 
+# Garantir que o diretório de logs existe
+os.makedirs('logs', exist_ok=True)
+
 # Configurar logging
 logging.basicConfig(
     filename='logs/jira_to_teams.log',
@@ -59,7 +62,8 @@ def pull_and_send_notifications():
             {"key": "pessoais_aguardando", "title": "⏳ Chamados Aguardando Atendimento"},
             {"key": "pessoais_sla_critico", "title": "⚠️ Chamados que o SLA Vai Estourar em 1h ou menos"},
             {"key": "pessoais_sem_interacao", "title": "🕰️ Chamados Sem Interação a Mais de 3 Dias"},
-            {"key": "pessoais_projetos", "title": "🚀 Projetos Ativos (TIC/GPM)"},
+            {"key": "pessoais_projetos_tic", "title": "🚀 Projetos Ativos TIC"},
+            {"key": "pessoais_projetos_gpm", "title": "🔄 Mudanças Ativas GPM"},
             {"key": "pessoais_finalizados_mes", "title": "✅ Chamados Finalizados (Este Mês)"}
         ]
 

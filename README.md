@@ -16,7 +16,7 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
 - Suporte nativo ao Dark Mode usando Tailwind CSS.
 - Abas de monitoramento:
   - 🕒 **Sustentação & DBA**: Aguardando Atendimento, SLA Crítico (< 1h), Sem Interação (+3 dias) e DBA Urgente.
-  - 🚀 **Projetos Ativos**: Chamados específicos de escopos de projeto (TIC/GPM).
+  - 🚀 **Projetos Ativos**: Separado em Projetos TIC e Mudanças GPM.
   - ✅ **Finalizados**: Histórico visual do que foi entregue no mês.
 - Multiusuário com input livre de e-mail e auto-refresh dinâmico (5 a 60 minutos).
 
@@ -78,8 +78,8 @@ Caso não queira rodar em containers para criar testes na própria máquina:
 2. Aguarde o carregamento automático (5 minutos) ou clique em "Atualizar Agora"
 
 **Alternar usuário:**
-1. Clique no dropdown "Usuário" no topo direito
-2. Selecione o usuário desejado
+1. Digite o nome do usuário ou e-mail no campo de texto no topo direito
+2. Pressione Enter para buscar os dados do usuário
 3. Os dados atualizam automaticamente para aquele usuário
 
 **Atualização manual:**
@@ -105,7 +105,7 @@ docker-compose logs -f jira-notifier
 | Característica | Web | Teams |
 |---------------|-----|-------|
 | **Interface** | Navegador (Bootstrap) | Notificação inline |
-| **Usuários** | Multiusuário (dropdown) | Geralmente 1 destinatário |
+| **Usuários** | Multiusuário (input de texto) | Geralmente 1 destinatário |
 | **Atualização** | Auto-refresh a cada 5 min | Manual ou agendado |
 | **Interatividade** | Alta (botões, links) | Baixa (links clicáveis) |
 | **Persistência** | Sessão do navegador | Mensagem no chat |
@@ -167,7 +167,8 @@ O sistema substitui dinamicamente a função `currentUser()` do Jira pelo nome d
 | **Aguardando** | `assignee = 'user' AND project NOT IN (...) AND statusCategory != Done` |
 | **SLA Crítico** | `assignee = 'user' AND "Tempo de resolução" <= remaining("1h")` |
 | **Sem Interação** | `assignee = 'user' AND updatedDate <= "-3d"` |
-| **Projetos Ativos** | `assignee = 'user' AND project IN (TIC, GPM)` |
+| **Projetos TIC** | `assignee = 'user' AND project IN (TIC)` |
+| **Mudanças GPM** | `assignee = 'user' AND project IN (GPM)` |
 | **Fila DBA** | `assignee IS EMPTY AND "Grupo Solucionador" = "DC - Banco de Dados"` |
 
 ---
@@ -185,8 +186,8 @@ O sistema substitui dinamicamente a função `currentUser()` do Jira pelo nome d
 - Confira se as queries JQL são válidas no seu Jira
 - Veja os logs no console do navegador (F12 → Console)
 
-**Dropdown não atualiza dados**
-- Verifique se o evento `change` está sendo disparado (console do navegador)
+**Input não atualiza dados**
+- Verifique se o evento `keypress` com Enter está sendo disparado (console do navegador)
 - Abra o DevTools (F12) e veja se há erros na rede
 
 **Nada aparece na tela**
@@ -218,8 +219,8 @@ Para dúvidas ou problemas, verifique:
 - Arquivo `.env` está configurado corretamente
 
 **Teams:**
-- Log do script: `services/teams/jira_to_teams.log`
-- Variáveis de ambiente no `services/teams/.env`
+- Log do script: `logs/jira_to_teams.log`
+- Variáveis de ambiente no `.env`
 - Webhook URL está ativa e correta
 
 ---

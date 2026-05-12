@@ -280,21 +280,23 @@
         </div>
 
         <!-- TAB 2: PROJETOS ATIVOS -->
-        <div id="tab-projetos" class="hidden">
-            <div class="glass-card border-blue-500/20">
+        <div id="tab-projetos" class="hidden columns-1 lg:columns-2 gap-6">
+
+            <!-- Projetos Ativos TIC -->
+            <div class="glass-card border-blue-500/20 break-inside-avoid mb-6">
                 <div class="card-header-styled bg-gradient-to-r from-indigo-500 to-purple-500 text-white cursor-pointer hover:opacity-90 justify-between"
-                    onclick="toggleCard('body_projetos', 'icon_projetos')" title="Clique para expandir/recolher">
+                    onclick="toggleCard('body_projetos_tic', 'icon_projetos_tic')" title="Clique para expandir/recolher">
                     <div class="flex items-center gap-2.5">
                         <i class="bi bi-rocket-takeoff"></i>
-                        <span class="text-base flex items-center">Projetos Ativos (TIC/GPM) <span
-                                id="count-pessoais_projetos"
+                        <span class="text-base flex items-center">Projetos Ativos TIC <span
+                                id="count-pessoais_projetos_tic"
                                 class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
                     </div>
-                    <i id="icon_projetos" class="bi bi-chevron-up opacity-80"></i>
+                    <i id="icon_projetos_tic" class="bi bi-chevron-up opacity-80"></i>
                 </div>
-                <div id="body_projetos" class="overflow-x-auto">
+                <div id="body_projetos_tic" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
-                        <tbody id="pessoais_projetos">
+                        <tbody id="pessoais_projetos_tic">
                             <tr>
                                 <td class="p-4">
                                     <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
@@ -304,6 +306,32 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Mudanças Ativas GPM -->
+            <div class="glass-card border-blue-500/20 break-inside-avoid mb-6">
+                <div class="card-header-styled bg-gradient-to-r from-purple-500 to-pink-500 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_projetos_gpm', 'icon_projetos_gpm')" title="Clique para expandir/recolher">
+                    <div class="flex items-center gap-2.5">
+                        <i class="bi bi-arrow-repeat"></i>
+                        <span class="text-base flex items-center">Mudanças Ativas GPM <span
+                                id="count-pessoais_projetos_gpm"
+                                class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
+                    </div>
+                    <i id="icon_projetos_gpm" class="bi bi-chevron-up opacity-80"></i>
+                </div>
+                <div id="body_projetos_gpm" class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <tbody id="pessoais_projetos_gpm">
+                            <tr>
+                                <td class="p-4">
+                                    <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
         <!-- TAB 3: FINALIZADOS -->
@@ -337,7 +365,7 @@
 
     <footer
         class="text-center py-10 mt-12 border-t border-black/5 dark:border-white/5 text-slate-400 text-xs tracking-wide">
-        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.5.0</span>
+        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.6.0</span>
     </footer>
 
     <script>
@@ -361,7 +389,8 @@
                 updateTable('pessoais_aguardando', data.pessoais_aguardando);
                 updateTable('pessoais_sla_critico', data.pessoais_sla_critico);
                 updateTable('pessoais_sem_interacao', data.pessoais_sem_interacao);
-                updateTable('pessoais_projetos', data.pessoais_projetos);
+                updateTable('pessoais_projetos_tic', data.pessoais_projetos_tic);
+                updateTable('pessoais_projetos_gpm', data.pessoais_projetos_gpm);
                 updateTable('pessoais_finalizados_mes', data.pessoais_finalizados_mes);
                 updateTable('dba_urgente', data.dba_urgente);
 
@@ -375,7 +404,7 @@
                 errorMsg.classList.remove('hidden');
 
                 const emptyState = '<tr><td class="p-6 text-center text-slate-400 italic text-sm">Falha ao carregar API</td></tr>';
-                ['pessoais_aguardando', 'pessoais_sla_critico', 'pessoais_sem_interacao', 'pessoais_projetos', 'pessoais_finalizados_mes', 'dba_urgente'].forEach(id => {
+                ['pessoais_aguardando', 'pessoais_sla_critico', 'pessoais_sem_interacao', 'pessoais_projetos_tic', 'pessoais_projetos_gpm', 'pessoais_finalizados_mes', 'dba_urgente'].forEach(id => {
                     document.getElementById(id).innerHTML = emptyState;
                 });
             }
@@ -422,7 +451,7 @@
         }
 
         function setLoaders() {
-            ['pessoais_aguardando', 'pessoais_sla_critico', 'pessoais_sem_interacao', 'pessoais_projetos', 'pessoais_finalizados_mes', 'dba_urgente'].forEach(id => {
+            ['pessoais_aguardando', 'pessoais_sla_critico', 'pessoais_sem_interacao', 'pessoais_projetos_tic', 'pessoais_projetos_gpm', 'pessoais_finalizados_mes', 'dba_urgente'].forEach(id => {
                 document.getElementById(id).innerHTML = loadingHtml;
             });
         }

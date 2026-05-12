@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-05-12
+### Added
+- Separação do card "Projetos Ativos" em dois cards independentes: "Projetos Ativos TIC" e "Mudanças Ativas GPM", cada um com sua própria query JQL, exibição em colunas lado a lado e seções separadas no notificador Teams.
+
+### Changed
+- Removido `debug=True` do Flask em produção, controlado agora via variável de ambiente `FLASK_DEBUG`.
+- Limpeza de comentários obsoletos no `requirements.txt` que referenciavam estrutura legada `services/teams/`.
+- Adicionada criação automática do diretório `logs/` no `jira_to_teams.py` para evitar falhas em deploy manual.
+- Documentação (`README.md`, `FILE_MAP.md`) atualizada: substituídas referências de "dropdown" para "input de texto" e contagem de queries (6 → 7).
+
 ## [0.5.0] - 2026-04-27
 ### Changed
 - **Reestruturação Arquitetural**: Código-fonte migrado para a pasta `src/` e arquivos legados movidos para `docs/`, seguindo as melhores práticas do ecossistema Python.
