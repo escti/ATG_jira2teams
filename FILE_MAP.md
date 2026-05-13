@@ -38,7 +38,8 @@ Este documento serve como um guia rápido detalhado da estrutura interna do proj
   - Segue estritamente as regras de UI/UX do `SKILL.md` (Glassmorphism, Dark Mode obrigatório, tipografia moderna).
   - Possui um inovador **Sistema de Abas (Tabs)** dinâmicas e Layout **Masonry** via CSS Columns, evitando que o empilhamento vertical prejudique o layout.
   - Apresenta interações inteligentes como contadores em tempo real e tags de status nativamente coloridas de acordo com as chaves do Jira.
-- **Lógica JS:** Faz pooling via `fetch` para a rota `/api/data`, controla auto-refresh dinâmico (5 a 60min) e gerencia os estados de carregamento.
+  - Gráfico de pizza (Chart.js) por status individual no topo das abas Sustentação e Projetos, com botões 1 a 5 para ajuste dinâmico de tamanho.
+- **Lógica JS:** Faz pooling via `fetch` para a rota `/api/data`, controla auto-refresh dinâmico (5 a 60min), gerencia os estados de carregamento e renderiza gráficos interativos com Chart.js.
 
 ---
 

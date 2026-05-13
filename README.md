@@ -18,6 +18,7 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
   - 🕒 **Sustentação & DBA**: Aguardando Atendimento, SLA Crítico (< 1h), Sem Interação (+3 dias) e DBA Urgente.
   - 🚀 **Projetos Ativos**: Separado em Projetos TIC e Mudanças GPM.
   - ✅ **Finalizados**: Histórico visual do que foi entregue no mês.
+- Gráfico de pizza por status individual nas abas Sustentação e Projetos, com ajuste de tamanho (1 a 5).
 - Multiusuário com input livre de e-mail e auto-refresh dinâmico (5 a 60 minutos).
 
 ### **2. Script Teams**
