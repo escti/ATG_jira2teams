@@ -27,6 +27,7 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <style type="text/tailwindcss">
         @layer base {
             body {
@@ -179,6 +180,17 @@
         <!-- TAB 1: SUSTENTAÇÃO -->
         <div id="tab-sustentacao" class="columns-1 lg:columns-2 gap-6">
 
+            <!-- Gráfico de Status -->
+            <div class="glass-card break-inside-avoid mb-6">
+                <div class="card-header-styled bg-gradient-to-r from-teal-400 to-cyan-400 text-white">
+                    <i class="bi bi-pie-chart-fill"></i>
+                    <span class="text-base">Status - Sustentação</span>
+                </div>
+                <div class="p-4">
+                    <canvas id="chart-sustentacao" height="220"></canvas>
+                </div>
+            </div>
+
             <!-- Fila DBA Urgente -->
             <div class="glass-card ring-2 ring-red-500/20 break-inside-avoid mb-6">
                 <div class="card-header-styled bg-gradient-to-r from-red-600 to-rose-500 text-white cursor-pointer hover:opacity-90 justify-between"
@@ -281,6 +293,17 @@
 
         <!-- TAB 2: PROJETOS ATIVOS -->
         <div id="tab-projetos" class="hidden columns-1 lg:columns-2 gap-6">
+
+            <!-- Gráfico de Status -->
+            <div class="glass-card break-inside-avoid mb-6">
+                <div class="card-header-styled bg-gradient-to-r from-teal-400 to-cyan-400 text-white">
+                    <i class="bi bi-pie-chart-fill"></i>
+                    <span class="text-base">Status - Projetos</span>
+                </div>
+                <div class="p-4">
+                    <canvas id="chart-projetos" height="220"></canvas>
+                </div>
+            </div>
 
             <!-- Projetos Ativos TIC -->
             <div class="glass-card border-blue-500/20 break-inside-avoid mb-6">
@@ -393,6 +416,7 @@
                 updateTable('pessoais_projetos_gpm', data.pessoais_projetos_gpm);
                 updateTable('pessoais_finalizados_mes', data.pessoais_finalizados_mes);
                 updateTable('dba_urgente', data.dba_urgente);
+                renderCharts(data);
 
                 document.getElementById('last-update').innerText = 'Sincronizado às ' + new Date().toLocaleTimeString();
                 document.getElementById('error-msg').classList.add('hidden');
@@ -524,6 +548,70 @@
                 body.classList.add('hidden');
                 icon.classList.replace('bi-chevron-up', 'bi-chevron-down');
             }
+        }
+
+        const chartInstances = {};
+
+        function renderCharts(data) {
+            renderPieChart('chart-sustentacao', ['dba_urgente', 'pessoais_sla_critico', 'pessoais_aguardando', 'pessoais_sem_interacao'], data);
+            renderPieChart('chart-projetos', ['pessoais_projetos_tic', 'pessoais_projetos_gpm'], data);
+        }
+
+        function renderPieChart(canvasId, keys, data) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            const statusCount = {};
+            keys.forEach(key => {
+                (data[key] || []).forEach(issue => {
+                    const s = issue.status;
+                    statusCount[s] = (statusCount[s] || 0) + 1;
+                });
+            });
+
+            const labels = Object.keys(statusCount);
+            const values = Object.values(statusCount);
+
+            if (chartInstances[canvasId]) {
+                chartInstances[canvasId].destroy();
+            }
+
+            if (labels.length === 0) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const palette = ['#4FACFE','#FF6B6B','#51CF66','#FFD43B','#CC5DE8','#20C997','#FF922B','#748FFC','#F783AC','#38D9A9','#FF8787','#A9E34B','#69DB7C','#9775FA','#FCC419'];
+
+            chartInstances[canvasId] = new Chart(canvas, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: labels.map((_, i) => palette[i % palette.length]),
+                        borderWidth: 2,
+                        borderColor: isDark ? '#28282d' : '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 12,
+                                usePointStyle: true,
+                                font: { size: 11 },
+                                color: isDark ? '#cbd5e1' : '#475569'
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         function switchTab(activeTabId) {
