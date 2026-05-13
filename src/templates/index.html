@@ -182,12 +182,18 @@
 
             <!-- Gráfico de Status -->
             <div class="glass-card break-inside-avoid mb-6">
-                <div class="card-header-styled bg-gradient-to-r from-teal-400 to-cyan-400 text-white">
-                    <i class="bi bi-pie-chart-fill"></i>
-                    <span class="text-base">Status - Sustentação</span>
+                <div class="card-header-styled bg-gradient-to-r from-teal-400 to-cyan-400 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_chart_sust', 'icon_chart_sust')" title="Clique para expandir/recolher">
+                    <div class="flex items-center gap-2.5">
+                        <i class="bi bi-pie-chart-fill"></i>
+                        <span class="text-base">Status - Sustentação</span>
+                    </div>
+                    <i id="icon_chart_sust" class="bi bi-chevron-up opacity-80"></i>
                 </div>
-                <div class="p-4">
-                    <canvas id="chart-sustentacao" height="220"></canvas>
+                <div id="body_chart_sust" class="overflow-x-auto">
+                    <div class="p-3">
+                        <canvas id="chart-sustentacao" height="160"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -296,12 +302,18 @@
 
             <!-- Gráfico de Status -->
             <div class="glass-card break-inside-avoid mb-6">
-                <div class="card-header-styled bg-gradient-to-r from-teal-400 to-cyan-400 text-white">
-                    <i class="bi bi-pie-chart-fill"></i>
-                    <span class="text-base">Status - Projetos</span>
+                <div class="card-header-styled bg-gradient-to-r from-teal-400 to-cyan-400 text-white cursor-pointer hover:opacity-90 justify-between"
+                    onclick="toggleCard('body_chart_proj', 'icon_chart_proj')" title="Clique para expandir/recolher">
+                    <div class="flex items-center gap-2.5">
+                        <i class="bi bi-pie-chart-fill"></i>
+                        <span class="text-base">Status - Projetos</span>
+                    </div>
+                    <i id="icon_chart_proj" class="bi bi-chevron-up opacity-80"></i>
                 </div>
-                <div class="p-4">
-                    <canvas id="chart-projetos" height="220"></canvas>
+                <div id="body_chart_proj" class="overflow-x-auto">
+                    <div class="p-3">
+                        <canvas id="chart-projetos" height="160"></canvas>
+                    </div>
                 </div>
             </div>
 
