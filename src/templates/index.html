@@ -200,7 +200,9 @@
                         <button data-chart="chart-sustentacao" data-size="220" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">5</button>
                     </div>
                     <div class="p-3">
-                        <canvas id="chart-sustentacao" height="160"></canvas>
+                        <div id="wrap-chart-sustentacao" style="height:160px">
+                            <canvas id="chart-sustentacao"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -328,7 +330,9 @@
                         <button data-chart="chart-projetos" data-size="220" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">5</button>
                     </div>
                     <div class="p-3">
-                        <canvas id="chart-projetos" height="160"></canvas>
+                        <div id="wrap-chart-projetos" style="height:160px">
+                            <canvas id="chart-projetos"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -446,6 +450,11 @@
                 updateTable('dba_urgente', data.dba_urgente);
                 Object.assign(lastFetchData, data);
                 renderCharts(data);
+                // Sincroniza altura do wrapper com o tamanho salvo
+                ['chart-sustentacao', 'chart-projetos'].forEach(id => {
+                    const w = document.getElementById('wrap-' + id);
+                    if (w && chartSizes[id]) w.style.height = chartSizes[id] + 'px';
+                });
 
                 document.getElementById('last-update').innerText = 'Sincronizado às ' + new Date().toLocaleTimeString();
                 document.getElementById('error-msg').classList.add('hidden');
@@ -588,8 +597,8 @@
             const size = parseInt(btn.dataset.size);
             chartSizes[canvasId] = size;
 
-            const canvas = document.getElementById(canvasId);
-            if (canvas) canvas.setAttribute('height', size);
+            const wrap = document.getElementById('wrap-' + canvasId);
+            if (wrap) wrap.style.height = size + 'px';
 
             btn.closest('.flex').querySelectorAll('[data-chart]').forEach(b => {
                 b.classList.remove('bg-teal-400', 'text-white');
@@ -598,10 +607,9 @@
             btn.classList.remove('bg-slate-100', 'dark:bg-zinc-700', 'text-slate-500', 'dark:text-slate-300');
             btn.classList.add('bg-teal-400', 'text-white');
 
-            const keys = canvasId === 'chart-sustentacao'
-                ? ['dba_urgente', 'pessoais_sla_critico', 'pessoais_aguardando', 'pessoais_sem_interacao']
-                : ['pessoais_projetos_tic', 'pessoais_projetos_gpm'];
-            renderPieChart(canvasId, keys, lastFetchData);
+            if (chartInstances[canvasId]) {
+                chartInstances[canvasId].resize();
+            }
         }
 
         function renderCharts(data) {
@@ -613,7 +621,8 @@
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
 
-            canvas.height = chartSizes[canvasId] || 160;
+            const wrap = document.getElementById('wrap-' + canvasId);
+            if (wrap) wrap.style.height = (chartSizes[canvasId] || 160) + 'px';
 
             const statusCount = {};
             keys.forEach(key => {
@@ -652,7 +661,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
                             position: 'bottom',
