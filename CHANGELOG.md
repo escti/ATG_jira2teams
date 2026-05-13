@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2026-05-12
+### Added
+- Gráfico de pizza por status individual nas abas Sustentação e Projetos, com botão seletor de tamanho (1 a 5) para ajuste dinâmico da altura do canvas.
+
 ## [0.6.0] - 2026-05-12
 ### Added
 - Separação do card "Projetos Ativos" em dois cards independentes: "Projetos Ativos TIC" e "Mudanças Ativas GPM", cada um com sua própria query JQL, exibição em colunas lado a lado e seções separadas no notificador Teams.

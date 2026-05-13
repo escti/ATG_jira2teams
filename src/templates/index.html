@@ -191,6 +191,14 @@
                     <i id="icon_chart_sust" class="bi bi-chevron-up opacity-80"></i>
                 </div>
                 <div id="body_chart_sust" class="overflow-x-auto">
+                    <div class="flex items-center gap-1 px-3 pt-2 pb-1 border-b border-black/5 dark:border-white/5">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Tamanho</span>
+                        <button data-chart="chart-sustentacao" data-size="100" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">1</button>
+                        <button data-chart="chart-sustentacao" data-size="130" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">2</button>
+                        <button data-chart="chart-sustentacao" data-size="160" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-teal-400 text-white transition-all active:scale-90">3</button>
+                        <button data-chart="chart-sustentacao" data-size="190" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">4</button>
+                        <button data-chart="chart-sustentacao" data-size="220" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">5</button>
+                    </div>
                     <div class="p-3">
                         <canvas id="chart-sustentacao" height="160"></canvas>
                     </div>
@@ -311,6 +319,14 @@
                     <i id="icon_chart_proj" class="bi bi-chevron-up opacity-80"></i>
                 </div>
                 <div id="body_chart_proj" class="overflow-x-auto">
+                    <div class="flex items-center gap-1 px-3 pt-2 pb-1 border-b border-black/5 dark:border-white/5">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Tamanho</span>
+                        <button data-chart="chart-projetos" data-size="100" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">1</button>
+                        <button data-chart="chart-projetos" data-size="130" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">2</button>
+                        <button data-chart="chart-projetos" data-size="160" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-teal-400 text-white transition-all active:scale-90">3</button>
+                        <button data-chart="chart-projetos" data-size="190" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">4</button>
+                        <button data-chart="chart-projetos" data-size="220" onclick="setChartSize(this)" class="chart-size-btn w-6 h-6 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-zinc-700 text-slate-500 dark:text-slate-300 hover:bg-teal-400 hover:text-white transition-all active:scale-90">5</button>
+                    </div>
                     <div class="p-3">
                         <canvas id="chart-projetos" height="160"></canvas>
                     </div>
@@ -400,7 +416,7 @@
 
     <footer
         class="text-center py-10 mt-12 border-t border-black/5 dark:border-white/5 text-slate-400 text-xs tracking-wide">
-        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.6.0</span>
+        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.6.1</span>
     </footer>
 
     <script>
@@ -428,6 +444,7 @@
                 updateTable('pessoais_projetos_gpm', data.pessoais_projetos_gpm);
                 updateTable('pessoais_finalizados_mes', data.pessoais_finalizados_mes);
                 updateTable('dba_urgente', data.dba_urgente);
+                Object.assign(lastFetchData, data);
                 renderCharts(data);
 
                 document.getElementById('last-update').innerText = 'Sincronizado às ' + new Date().toLocaleTimeString();
@@ -563,6 +580,29 @@
         }
 
         const chartInstances = {};
+        const chartSizes = {};
+        const lastFetchData = {};
+
+        function setChartSize(btn) {
+            const canvasId = btn.dataset.chart;
+            const size = parseInt(btn.dataset.size);
+            chartSizes[canvasId] = size;
+
+            const canvas = document.getElementById(canvasId);
+            if (canvas) canvas.setAttribute('height', size);
+
+            btn.closest('.flex').querySelectorAll('[data-chart]').forEach(b => {
+                b.classList.remove('bg-teal-400', 'text-white');
+                b.classList.add('bg-slate-100', 'dark:bg-zinc-700', 'text-slate-500', 'dark:text-slate-300');
+            });
+            btn.classList.remove('bg-slate-100', 'dark:bg-zinc-700', 'text-slate-500', 'dark:text-slate-300');
+            btn.classList.add('bg-teal-400', 'text-white');
+
+            const keys = canvasId === 'chart-sustentacao'
+                ? ['dba_urgente', 'pessoais_sla_critico', 'pessoais_aguardando', 'pessoais_sem_interacao']
+                : ['pessoais_projetos_tic', 'pessoais_projetos_gpm'];
+            renderPieChart(canvasId, keys, lastFetchData);
+        }
 
         function renderCharts(data) {
             renderPieChart('chart-sustentacao', ['dba_urgente', 'pessoais_sla_critico', 'pessoais_aguardando', 'pessoais_sem_interacao'], data);
@@ -572,6 +612,8 @@
         function renderPieChart(canvasId, keys, data) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
+
+            canvas.height = chartSizes[canvasId] || 160;
 
             const statusCount = {};
             keys.forEach(key => {
