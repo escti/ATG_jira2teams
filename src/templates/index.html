@@ -420,16 +420,27 @@
 
     <footer
         class="text-center py-10 mt-12 border-t border-black/5 dark:border-white/5 text-slate-400 text-xs tracking-wide">
-        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.6.1</span>
+        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.7.0</span>
     </footer>
 
     <script>
         const loadingHtml = `<tr><td class="p-8"><div class="animate-pulse flex flex-col gap-3"><div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-full"></div><div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div></div></td></tr>`;
+        let isFirstLoad = true;
+        let lastUser = '';
+        let unreadCount = 0;
 
         async function fetchData() {
             try {
                 const selectedUser = document.getElementById('user-input').value.trim();
                 const url = selectedUser ? `/api/data?user=${encodeURIComponent(selectedUser)}` : '/api/data';
+
+                if (selectedUser !== lastUser) {
+                    lastUser = selectedUser;
+                    lastFetchData = {};
+                    isFirstLoad = true;
+                }
+
+                const oldData = Object.assign({}, lastFetchData);
 
                 const response = await fetch(url);
                 if (!response.ok) {
@@ -440,6 +451,14 @@
 
                 const data = await response.json();
                 if (data.error) throw new Error(data.error);
+
+                if (!isFirstLoad && Object.keys(oldData).length > 0) {
+                    const changes = detectChanges(oldData, data);
+                    if (changes.newTickets.length || changes.statusChanges.length) {
+                        notifyChanges(changes);
+                    }
+                }
+                isFirstLoad = false;
 
                 updateTable('pessoais_aguardando', data.pessoais_aguardando);
                 updateTable('pessoais_sla_critico', data.pessoais_sla_critico);
@@ -590,7 +609,7 @@
 
         const chartInstances = {};
         const chartSizes = {};
-        const lastFetchData = {};
+        let lastFetchData = {};
 
         function setChartSize(btn) {
             const canvasId = btn.dataset.chart;
@@ -690,6 +709,106 @@
             const activeBtn = document.getElementById('btn-' + activeTabId);
             activeBtn.classList.add('text-blue-600', 'border-blue-600', 'font-bold');
             activeBtn.classList.remove('text-slate-500', 'border-transparent', 'font-semibold');
+        }
+
+        // ========== Notificações no Navegador ==========
+        const BASE_TITLE = 'Jira Dashboard - ATG';
+
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && unreadCount > 0) {
+                unreadCount = 0;
+                document.title = BASE_TITLE;
+            }
+        });
+
+        function playNotificationSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {}
+        }
+
+        function detectChanges(oldData, newData) {
+            const changes = { newTickets: [], statusChanges: [] };
+            const excludeGroups = ['pessoais_finalizados_mes'];
+            if (!oldData || Object.keys(oldData).length === 0) return changes;
+
+            const oldMap = new Map();
+            Object.keys(oldData).forEach(groupKey => {
+                (oldData[groupKey] || []).forEach(issue => {
+                    oldMap.set(issue.key, { status: issue.status });
+                });
+            });
+
+            Object.keys(newData).forEach(groupKey => {
+                if (excludeGroups.includes(groupKey)) return;
+                (newData[groupKey] || []).forEach(issue => {
+                    const old = oldMap.get(issue.key);
+                    if (!old) {
+                        changes.newTickets.push(issue);
+                    } else if (old.status !== issue.status) {
+                        changes.statusChanges.push({ ...issue, oldStatus: old.status });
+                    }
+                });
+            });
+
+            return changes;
+        }
+
+        function notifyChanges(changes) {
+            if (!document.hidden) return;
+            if (Notification.permission !== 'granted') return;
+
+            playNotificationSound();
+
+            const { newTickets, statusChanges } = changes;
+            const total = newTickets.length + statusChanges.length;
+            unreadCount += total;
+            document.title = `(${unreadCount}) ${BASE_TITLE}`;
+
+            if (newTickets.length === 1) {
+                const t = newTickets[0];
+                const n = new Notification('🆕 Novo chamado: ' + t.key, {
+                    body: t.summary, tag: 'jira-new', requireInteraction: true
+                });
+                n.onclick = () => { window.focus(); window.open(t.url, '_blank'); n.close(); };
+            } else if (newTickets.length > 1) {
+                const t = newTickets[0];
+                const n = new Notification('🆕 ' + newTickets.length + ' novos chamados', {
+                    body: t.key + ': ' + t.summary + ' (+' + (newTickets.length - 1) + ' mais)',
+                    tag: 'jira-new', requireInteraction: true
+                });
+                n.onclick = () => { window.focus(); n.close(); };
+            }
+
+            if (statusChanges.length === 1) {
+                const t = statusChanges[0];
+                const n = new Notification('🔄 ' + t.key + ': ' + t.oldStatus + ' → ' + t.status, {
+                    body: t.summary, tag: 'jira-status', requireInteraction: true
+                });
+                n.onclick = () => { window.focus(); window.open(t.url, '_blank'); n.close(); };
+            } else if (statusChanges.length > 1) {
+                const t = statusChanges[0];
+                const n = new Notification('🔄 ' + statusChanges.length + ' status alterados', {
+                    body: t.key + ': ' + t.oldStatus + ' → ' + t.status + ' (+' + (statusChanges.length - 1) + ' mais)',
+                    tag: 'jira-status', requireInteraction: true
+                });
+                n.onclick = () => { window.focus(); n.close(); };
+            }
         }
     </script>
 </body>

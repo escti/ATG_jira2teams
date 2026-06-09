@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-06-08
+### Added
+- Notificações no navegador (Browser Notification API) ao detectar novos chamados ou alterações de status no dashboard, com som de alerta via Web Audio API.
+- Badge dinâmico no título da aba (ex: `(3) Jira Dashboard - ATG`) indicando mudanças não visualizadas, resetado ao focar a aba.
+- Sistema de diff client-side que compara os dados do último fetch com o novo, ignorando a aba "Finalizados" e a primeira carga.
+
+### Changed
+- Otimização do ciclo de polling: detecção de mudanças agora é feita antes da re-renderização, e notificações só disparam quando a aba está em background.
+- Reset automático do estado de notificações ao trocar o usuário no input.
+
 ## [0.6.1] - 2026-05-12
 ### Added
 - Gráfico de pizza por status individual nas abas Sustentação e Projetos, com botão seletor de tamanho (1 a 5) para ajuste dinâmico da altura do canvas.
