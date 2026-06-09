@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.3] - 2026-06-09
+### Changed
+- Cores dos badges de status agora são definidas pelo nome do status (não apenas pela `statusCategory` do Jira). Mapeamento: BACKLOG / Aguardando Atendimento / Aguardando Aprovação / Pendente Externo (cinza), Em Andamento / Em Atendimento (azul), Priorizado (âmbar), Cancelado (rose), Concluído (verde). Fallback automático para cor por categoria cobre status não mapeados. Aplicado em todas as abas.
+
 ## [0.7.2] - 2026-06-09
 ### Changed
 - Ordenação das queries `pessoais_projetos_tic` e `pessoais_projetos_gpm` simplificada para `ORDER BY updated ASC`, exibindo os chamados menos atualizados primeiro (topo) e os mais novos por último. A mudança é refletida tanto no dashboard web quanto nas mensagens do Teams (que consomem o mesmo `get_dashboard_data()`).

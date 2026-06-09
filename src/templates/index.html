@@ -420,7 +420,7 @@
 
     <footer
         class="text-center py-10 mt-12 border-t border-black/5 dark:border-white/5 text-slate-400 text-xs tracking-wide">
-        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.7.2</span>
+        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.7.3</span>
     </footer>
 
     <script>
@@ -491,7 +491,23 @@
             }
         }
 
-        function getStatusColor(category) {
+        function getStatusColor(statusName, category) {
+            const s = (statusName || '').toUpperCase().trim();
+            if (s === 'BACKLOG' || s === 'AGUARDANDO ATENDIMENTO' || s === 'AGUARDANDO APROVAÇÃO' || s === 'AGUARDANDO APROVACAO' || s === 'PENDENTE EXTERNO') {
+                return 'bg-slate-500/10 dark:bg-white/10 text-slate-600 dark:text-slate-300 border-slate-500/20';
+            }
+            if (s === 'EM ANDAMENTO' || s === 'EM ATENDIMENTO') {
+                return 'bg-blue-500/10 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-500/20';
+            }
+            if (s === 'PRIORIZADO') {
+                return 'bg-amber-500/10 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-500/20';
+            }
+            if (s === 'CANCELADO' || s === 'CANCELADA') {
+                return 'bg-rose-500/10 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 border-rose-500/20';
+            }
+            if (s === 'CONCLUÍDO' || s === 'CONCLUIDO' || s === 'CONCLUÍDO(A)' || s === 'CONCLUIDA') {
+                return 'bg-emerald-500/10 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+            }
             if (category === 'done') return 'bg-emerald-500/10 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
             if (category === 'indeterminate') return 'bg-amber-500/10 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 border-amber-500/20';
             return 'bg-slate-500/10 dark:bg-white/10 text-slate-600 dark:text-slate-300 border-slate-500/20';
@@ -516,7 +532,7 @@
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-1 flex-wrap">
                                 <span class="bg-slate-500/10 dark:bg-white/10 text-slate-500 dark:text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded border border-black/5 dark:border-white/10">${issue.key}</span>
-                                <span class="${getStatusColor(issue.status_category)} text-[9px] font-bold px-2 py-0.5 rounded border">${issue.status}</span>
+                                <span class="${getStatusColor(issue.status, issue.status_category)} text-[9px] font-bold px-2 py-0.5 rounded border">${issue.status}</span>
                                 <h4 class="font-bold text-sm text-slate-700 dark:text-slate-200 leading-tight">${issue.summary}</h4>
                             </div>
                             <div class="text-[10px] text-slate-400 font-medium flex items-center gap-1.5">
