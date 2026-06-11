@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.4] - 2026-06-09
+### Added
+- Badge "⏱ SLA" com `animate-pulse` (pulsante) nos tickets do card "Aguardando Atendimento" que estão com SLA crítico (≤ 1h), identificados via cross-reference com os dados da query `pessoais_sla_critico`. Cores em rose seguindo padrão de alertas críticos do SKILL.md (dark/light).
+
 ## [0.7.3] - 2026-06-09
 ### Changed
 - Cores dos badges de status agora são definidas pelo nome do status (não apenas pela `statusCategory` do Jira). Mapeamento: BACKLOG / Aguardando Atendimento / Aguardando Aprovação / Pendente Externo (cinza), Em Andamento / Em Atendimento (azul), Priorizado (âmbar), Cancelado (rose), Concluído (verde). Fallback automático para cor por categoria cobre status não mapeados. Aplicado em todas as abas.
