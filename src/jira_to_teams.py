@@ -58,9 +58,10 @@ def pull_and_send_notifications():
             "sections": []
         }
 
+        sla_critical_keys = set(i["key"] for i in data.get("pessoais_sla_critico", []))
+
         sections_config = [
             {"key": "pessoais_aguardando", "title": "⏳ Chamados Aguardando Atendimento"},
-            {"key": "pessoais_sla_critico", "title": "⚠️ Chamados que o SLA Vai Estourar em 1h ou menos"},
             {"key": "pessoais_sem_interacao", "title": "🕰️ Chamados Sem Interação a Mais de 3 Dias"},
             {"key": "pessoais_projetos_tic", "title": "🚀 Projetos Ativos TIC"},
             {"key": "pessoais_projetos_gpm", "title": "🔄 Mudanças Ativas GPM"},
@@ -78,9 +79,12 @@ def pull_and_send_notifications():
                 section["facts"].append({"name": "Status", "value": "Nenhum chamado encontrado."})
             else:
                 for issue in issues:
+                    value = f"{issue['summary']} | Atualizado: {issue['updated']} | [Abrir]({issue['url']})"
+                    if config["key"] == "pessoais_aguardando" and issue["key"] in sla_critical_keys:
+                        value = "🚨 " + value
                     section["facts"].append({
                         "name": issue["key"],
-                        "value": f"{issue['summary']} | Atualizado: {issue['updated']} | [Abrir]({issue['url']})"
+                        "value": value
                     })
             first_message["sections"].append(section)
 

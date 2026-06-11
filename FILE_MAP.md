@@ -18,7 +18,7 @@ Este documento serve como um guia rápido detalhado da estrutura interna do proj
 - **Descrição:** Classe de integração e inteligência (`JiraClient`) que faz as chamadas HTTP para a API v3 do Jira Cloud.
 - **Lógica Principal:**
   - `run_jql_query()`: Executa queries (tenta endpoint primário e fallback) com tratamento de erro e logs de auditoria no terminal.
-  - `get_dashboard_data()`: Centraliza as 7 queries JQL principais do sistema (Sustentação, SLA, Finalizados, Sem Interação, DBA, Projetos TIC e Projetos GPM) e agora injeta o "statusCategory" dinamicamente no retorno.
+  - `get_dashboard_data()`: Centraliza as 7 queries JQL principais do sistema (Sustentação, SLA, Finalizados, Sem Interação, DBA, Projetos TIC e Projetos GPM) e agora injeta o "statusCategory" dinamicamente no retorno. A query SLA (pessoais_sla_critico) ainda roda internamente para alimentar badges ⏱ no card "Aguardando Atendimento".
   - **Mapeamento de Usuário:** O sistema agora é dinâmico, recebendo o prefixo do e-mail ou e-mail completo via input de texto livre para mapear o `assignee` com precisão, ao invés de usar dropdowns estáticos.
 
 ### `src/jira_to_teams.py`

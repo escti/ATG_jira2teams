@@ -231,31 +231,6 @@
                 </div>
             </div>
 
-            <!-- SLA Crítico -->
-            <div class="glass-card break-inside-avoid mb-6">
-                <div class="card-header-styled bg-gradient-to-r from-amber-400 to-orange-500 text-white cursor-pointer hover:opacity-90 justify-between"
-                    onclick="toggleCard('body_sla', 'icon_sla')" title="Clique para expandir/recolher">
-                    <div class="flex items-center gap-2.5">
-                        <i class="bi bi-exclamation-triangle"></i>
-                        <span class="text-base flex items-center">SLA Crítico (< 1h) <span
-                                id="count-pessoais_sla_critico"
-                                class="text-[10px] bg-black/20 px-2 py-0.5 rounded-full ml-3 font-bold">0</span></span>
-                    </div>
-                    <i id="icon_sla" class="bi bi-chevron-up opacity-80"></i>
-                </div>
-                <div id="body_sla" class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <tbody id="pessoais_sla_critico">
-                            <tr>
-                                <td class="p-4">
-                                    <div class="animate-pulse h-5 bg-slate-200 dark:bg-slate-700 rounded"></div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
             <!-- Aguardando -->
             <div class="glass-card break-inside-avoid mb-6">
                 <div class="card-header-styled bg-gradient-to-r from-blue-500 to-cyan-400 text-white cursor-pointer hover:opacity-90 justify-between"
@@ -420,7 +395,7 @@
 
     <footer
         class="text-center py-10 mt-12 border-t border-black/5 dark:border-white/5 text-slate-400 text-xs tracking-wide">
-        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.7.4</span>
+        ATG Monitor Flow &copy; 2026 | Versão <span class="font-bold text-blue-500/80">0.7.5</span>
     </footer>
 
     <script>
@@ -462,7 +437,6 @@
 
                 const slaCriticalKeys = new Set((data.pessoais_sla_critico || []).map(i => i.key));
                 updateTable('pessoais_aguardando', data.pessoais_aguardando, slaCriticalKeys);
-                updateTable('pessoais_sla_critico', data.pessoais_sla_critico);
                 updateTable('pessoais_sem_interacao', data.pessoais_sem_interacao);
                 updateTable('pessoais_projetos_tic', data.pessoais_projetos_tic);
                 updateTable('pessoais_projetos_gpm', data.pessoais_projetos_gpm);
@@ -486,7 +460,7 @@
                 errorMsg.classList.remove('hidden');
 
                 const emptyState = '<tr><td class="p-6 text-center text-slate-400 italic text-sm">Falha ao carregar API</td></tr>';
-                ['pessoais_aguardando', 'pessoais_sla_critico', 'pessoais_sem_interacao', 'pessoais_projetos_tic', 'pessoais_projetos_gpm', 'pessoais_finalizados_mes', 'dba_urgente'].forEach(id => {
+                ['pessoais_aguardando', 'pessoais_sem_interacao', 'pessoais_projetos_tic', 'pessoais_projetos_gpm', 'pessoais_finalizados_mes', 'dba_urgente'].forEach(id => {
                     document.getElementById(id).innerHTML = emptyState;
                 });
             }
@@ -550,7 +524,7 @@
         }
 
         function setLoaders() {
-            ['pessoais_aguardando', 'pessoais_sla_critico', 'pessoais_sem_interacao', 'pessoais_projetos_tic', 'pessoais_projetos_gpm', 'pessoais_finalizados_mes', 'dba_urgente'].forEach(id => {
+            ['pessoais_aguardando', 'pessoais_sem_interacao', 'pessoais_projetos_tic', 'pessoais_projetos_gpm', 'pessoais_finalizados_mes', 'dba_urgente'].forEach(id => {
                 document.getElementById(id).innerHTML = loadingHtml;
             });
         }
@@ -650,7 +624,7 @@
         }
 
         function renderCharts(data) {
-            renderPieChart('chart-sustentacao', ['dba_urgente', 'pessoais_sla_critico', 'pessoais_aguardando', 'pessoais_sem_interacao'], data);
+            renderPieChart('chart-sustentacao', ['dba_urgente', 'pessoais_aguardando', 'pessoais_sem_interacao'], data);
             renderPieChart('chart-projetos', ['pessoais_projetos_tic', 'pessoais_projetos_gpm'], data);
         }
 

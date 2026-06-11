@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.5] - 2026-06-09
+### Changed
+- Removido card "SLA Crítico" da aba Sustentação (substituído pela badge ⏱ inline no card "Aguardando Atendimento"). Gráfico de pizza simplificado (sem fatia SLA duplicada).
+- Query `pessoais_finalizados_mes` agora inclui projetos TIC e GPM (removido filtro `project NOT IN`), exibindo todos os chamados finalizados do mês independente do projeto.
+- Sessão "⚠️ Chamados que o SLA Vai Estourar" removida do notificador Teams. Tickets com SLA crítico agora são sinalizados com "🚨" inline no card "Aguardando Atendimento" do Teams.
+
 ## [0.7.4] - 2026-06-09
 ### Added
 - Badge "⏱ SLA" com `animate-pulse` (pulsante) nos tickets do card "Aguardando Atendimento" que estão com SLA crítico (≤ 1h), identificados via cross-reference com os dados da query `pessoais_sla_critico`. Cores em rose seguindo padrão de alertas críticos do SKILL.md (dark/light).
