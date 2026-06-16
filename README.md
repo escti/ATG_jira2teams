@@ -15,7 +15,7 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
 - Interface fluida com **Sistema de Abas (Tabs)** e layout **Masonry** (Colunas dinâmicas).
 - Suporte nativo ao Dark Mode usando Tailwind CSS.
 - Abas de monitoramento:
-  - 🕒 **Sustentação & DBA**: Aguardando Atendimento, SLA Crítico (< 1h), Sem Interação (+3 dias) e DBA Urgente.
+  - 🕒 **Sustentação & DBA**: Aguardando Atendimento (com badge ⏱ SLA), Sem Interação (+3 dias) e DBA Urgente.
   - 🚀 **Projetos Ativos**: Separado em Projetos TIC e Mudanças GPM.
   - ✅ **Finalizados**: Histórico visual do que foi entregue no mês.
 - Gráfico de pizza por status individual nas abas Sustentação e Projetos, com ajuste de tamanho (1 a 5).
@@ -23,7 +23,7 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
 
 ### **2. Script Teams**
 - Envia notificações automáticas para o Microsoft Teams
-- Dois cards: Pessoal (3 seções) e Fila DBA (1 seção)
+- Dois cards: Pessoal (Aguardando, Sem Interação, Projetos TIC, Mudanças GPM, Finalizados) e Fila DBA (1 seção)
 - Execução manual ou agendada via cron/task scheduler
 
 ### **3. Controles de Atualização**
@@ -105,7 +105,7 @@ docker-compose logs -f jira-notifier
 
 | Característica | Web | Teams |
 |---------------|-----|-------|
-| **Interface** | Navegador (Bootstrap) | Notificação inline |
+| **Interface** | Navegador (Tailwind CSS) | Notificação inline |
 | **Usuários** | Multiusuário (input de texto) | Geralmente 1 destinatário |
 | **Atualização** | Auto-refresh a cada 5 min | Manual ou agendado |
 | **Interatividade** | Alta (botões, links) | Baixa (links clicáveis) |
@@ -156,21 +156,21 @@ Frontend (atualiza tabelas)
 
 ## 🔍 Como Funciona o Multiusuário
 
-O sistema substitui dinamicamente a função `currentUser()` do Jira pelo nome do usuário selecionado:
+O sistema utiliza o e-mail do usuário informado no campo de texto (ou o `JIRA_USERNAME` do `.env` como padrão) para substituir dinamicamente nas queries JQL:
 
-- **Sem parâmetro:** `assignee = currentUser()` → Mostra chamados do usuário logado no Jira
-- **Com parâmetro:** `assignee = 'user_name'` → Mostra chamados do usuário específico
+- **Padrão (sem input):** Usa o `JIRA_USERNAME` do arquivo `.env`
+- **Com input personalizado:** `assignee = 'prefixo_ou_email'` → busca chamados do usuário específico
 
 ### Exemplos de Queries:
 
 | Card | Query (simplificada) |
 |------|-------|
-| **Aguardando** | `assignee = 'user' AND project NOT IN (...) AND statusCategory != Done` |
-| **SLA Crítico** | `assignee = 'user' AND "Tempo de resolução" <= remaining("1h")` |
-| **Sem Interação** | `assignee = 'user' AND updatedDate <= "-3d"` |
-| **Projetos TIC** | `assignee = 'user' AND project IN (TIC)` |
-| **Mudanças GPM** | `assignee = 'user' AND project IN (GPM)` |
-| **Fila DBA** | `assignee IS EMPTY AND "Grupo Solucionador" = "DC - Banco de Dados"` |
+| **Aguardando** | `assignee = 'user' AND project NOT IN (...) AND status NOT IN (...) ORDER BY status, SLA, updated` |
+| **Sem Interação** | `assignee = 'user' AND statusCategory != Done AND updatedDate <= "-3d"` |
+| **Projetos TIC** | `assignee = 'user' AND project IN (TIC) AND resolution = Unresolved ORDER BY updated ASC` |
+| **Mudanças GPM** | `assignee = 'user' AND project IN (GPM) AND resolution = Unresolved ORDER BY updated ASC` |
+| **Finalizados** | `assignee = 'user' AND resolution = done AND resolved >= startOfMonth()` |
+| **Fila DBA** | `assignee IS EMPTY AND "Grupo Solucionador" = "DC - Banco de Dados" AND cf[10321] <= remaining("1h")` |
 
 ---
 

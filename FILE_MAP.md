@@ -18,7 +18,7 @@ Este documento serve como um guia rápido detalhado da estrutura interna do proj
 - **Descrição:** Classe de integração e inteligência (`JiraClient`) que faz as chamadas HTTP para a API v3 do Jira Cloud.
 - **Lógica Principal:**
   - `run_jql_query()`: Executa queries (tenta endpoint primário e fallback) com tratamento de erro e logs de auditoria no terminal.
-  - `get_dashboard_data()`: Centraliza as 7 queries JQL principais do sistema (Sustentação, SLA, Finalizados, Sem Interação, DBA, Projetos TIC e Projetos GPM) e agora injeta o "statusCategory" dinamicamente no retorno. A query SLA (pessoais_sla_critico) ainda roda internamente para alimentar badges ⏱ no card "Aguardando Atendimento".
+  - `get_dashboard_data()`: Centraliza as 7 queries JQL principais do sistema (Sustentação, SLA, Finalizados, Sem Interação, DBA, Projetos TIC e Projetos GPM) e injeta o "statusCategory" dinamicamente no retorno. A query SLA (pessoais_sla_critico) ainda roda internamente para alimentar badges ⏱ no card "Aguardando Atendimento". A query DBA filtra por SLA de primeira resposta (`cf[10321]`) ≤ 1h e não pausado.
   - **Mapeamento de Usuário:** O sistema agora é dinâmico, recebendo o prefixo do e-mail ou e-mail completo via input de texto livre para mapear o `assignee` com precisão, ao invés de usar dropdowns estáticos.
 
 ### `src/jira_to_teams.py`
@@ -37,7 +37,7 @@ Este documento serve como um guia rápido detalhado da estrutura interna do proj
 - **Design e UI/UX:** 
   - Segue estritamente as regras de UI/UX do `SKILL.md` (Glassmorphism, Dark Mode obrigatório, tipografia moderna).
   - Possui um inovador **Sistema de Abas (Tabs)** dinâmicas e Layout **Masonry** via CSS Columns, evitando que o empilhamento vertical prejudique o layout.
-  - Apresenta interações inteligentes como contadores em tempo real e tags de status nativamente coloridas de acordo com as chaves do Jira.
+  - Apresenta interações inteligentes como contadores em tempo real e tags de status coloridas por nome do status (ex: Em Andamento azul, Cancelado rose, Concluído verde) com fallback automático por categoria do Jira.
   - Gráfico de pizza (Chart.js) por status individual no topo das abas Sustentação e Projetos, com botões 1 a 5 para ajuste dinâmico de tamanho.
 - **Lógica JS:** Faz pooling via `fetch` para a rota `/api/data`, controla auto-refresh dinâmico (5 a 60min), gerencia os estados de carregamento e renderiza gráficos interativos com Chart.js.
 
