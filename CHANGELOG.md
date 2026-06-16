@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.7] - 2026-06-09
+### Changed
+- Query `dba_urgente` agora filtra apenas tickets com SLA de primeira resposta (`cf[10321]`) ≤ 1h restante e não pausado, e ordena por este SLA (mais urgente primeiro). Tickets recém-criados sem SLA crítico deixam de aparecer no card "Fila DBA Urgente".
+
 ## [0.7.6] - 2026-06-09
 ### Fixed
 - Corrigida query `pessoais_finalizados_mes`: removido filtro `status not in (Concluído, Backlog, Cancelado)` que impedia a exibição de tickets TIC (e outros projetos cujo status final é "Concluído") na aba Finalizados. A condição `resolution = done` já é suficiente para garantir que apenas tickets resolvidos do mês sejam retornados.

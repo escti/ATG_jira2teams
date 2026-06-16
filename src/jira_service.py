@@ -72,7 +72,7 @@ class JiraClient:
             "pessoais_projetos_tic": f"assignee = '{assignee_email}' AND project IN (TIC) AND resolution = Unresolved AND status NOT IN (Concluído, Backlog, Cancelado) ORDER BY updated ASC",
             "pessoais_projetos_gpm": f"assignee = '{assignee_email}' AND project IN (GPM) AND resolution = Unresolved AND status NOT IN (Concluído, Backlog, Cancelado) ORDER BY updated ASC",
             "pessoais_finalizados_mes": f"assignee = '{assignee_email}' AND resolution = done AND resolved >= startOfMonth() ORDER BY created DESC, status DESC, updated ASC, 'Tempo de resolução' DESC",
-            "dba_urgente": 'assignee = empty AND project NOT IN (TIC, GPM) AND status NOT IN (Done, "Concluído(a)", Encerrado, Cancelado, Canceled, Reprovado, "Aguardando Aprovação") AND "grupo solucionador[group picker (single group)]" = "DC - Banco de Dados (DBA)" ORDER BY \'Tempo de resolução\' ASC'
+            "dba_urgente": 'assignee = empty AND project NOT IN (TIC, GPM) AND status NOT IN (Done, "Concluído(a)", Encerrado, Cancelado, Canceled, Reprovado, "Aguardando Aprovação") AND "grupo solucionador[group picker (single group)]" = "DC - Banco de Dados (DBA)" AND \'cf[10321]\' != paused() AND \'cf[10321]\' <= remaining(\'1h\') ORDER BY \'cf[10321]\' ASC'
         }
         
         results = {}
