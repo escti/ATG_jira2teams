@@ -66,7 +66,7 @@ class JiraClient:
             assignee_email = self.username
         
         queries = {
-            "pessoais_aguardando": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND resolution = Unresolved AND status not in (Concluído, Backlog, Cancelado, 'PENDENTE EXTERNO') ORDER BY status ASC, 'Tempo de resolução' ASC, updated ASC",
+            "pessoais_aguardando": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND resolution = Unresolved AND status not in (Concluído, Backlog, Cancelado) ORDER BY status ASC, 'Tempo de resolução' ASC, updated ASC",
             "pessoais_sla_critico": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND status IN ('Em atendimento', 'Aguardando atendimento') AND updated <= endOfYear() AND 'Tempo de resolução' != paused() AND 'Tempo de resolução' <= remaining('1h') ORDER BY 'Tempo de resolução' ASC",
             "pessoais_sem_interacao": f"assignee = '{assignee_email}' AND project NOT IN (TIC, GPM) AND statusCategory != Done and updatedDate <= '-3d' ORDER BY status ASC, 'Tempo de resolução' ASC, updated ASC",
             "pessoais_projetos_tic": f"assignee = '{assignee_email}' AND project IN (TIC) AND resolution = Unresolved AND status NOT IN (Concluído, Backlog, Cancelado) ORDER BY updated ASC",
