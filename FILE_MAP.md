@@ -1,6 +1,6 @@
 # 🗺️ Mapa de Arquivos (Context Map)
 
-> **⚠️ AVISO CRÍTICO PARA IA:** Antes de iniciar qualquer tarefa de codificação, refatoração ou planejamento neste repositório, **VOCÊ DEVE OBRIGATORIAMENTE LER O ARQUIVO `SKILL.md` COMO SUA BÍBLIA ABSOLUTA**. Lá estão as regras intransigentes de arquitetura, UI/UX e controle de versão (SemVer) que não podem ser violadas sob nenhuma hipótese.
+> **⚠️ AVISO CRÍTICO PARA IA:** Antes de iniciar qualquer tarefa de codificação, refatoração ou planejamento neste repositório, **VOCÊ DEVE OBRIGATORIAMENTE LER AS SKILLS EM `.opencode/skills/*/SKILL.md` COMO SUA BÍBLIA ABSOLUTA**. Lá estão as regras intransigentes de arquitetura, UI/UX e controle de versão (SemVer), divididas em skills por domínio (`ui-ux`, `backend`, `versioning`), que não podem ser violadas sob nenhuma hipótese.
 
 Este documento serve como um guia rápido detalhado da estrutura interna do projeto **ATG Jira2Teams**. Seu objetivo principal é fornecer contexto técnico imediato para a IA e desenvolvedores, evitando a necessidade de ler todos os arquivos para entender a arquitetura.
 
@@ -60,8 +60,12 @@ Este documento serve como um guia rápido detalhado da estrutura interna do proj
 
 ## 📜 Governança e Regras
 
-### `SKILL.md`
-- **Descrição:** A "Constituição" arquitetural do projeto. Define regras rígidas sobre design (Tailwind CSS obrigatório), segurança (tratamento de erros) e padronizações para qualquer futura atualização do código.
+### `.opencode/skills/`
+- **Descrição:** Skills do OpenCode que definem as regras de arquitetura, divididas em:
+  - `ui-ux/` — Design (Glassmorphism, Dark Mode, Tailwind, paleta de cores, acessibilidade)
+  - `backend/` — Tratamento de erros (try/catch, logging)
+  - `versioning/` — Controle de versão (SemVer, changelog, footer, commits em pt-br)
+  Consulte os `SKILL.md` dentro de cada pasta.
 
 ### `CHANGELOG.md`
 - **Descrição:** Registro de alterações aderente ao Semantic Versioning (SemVer). Rastreia todas as versões em produção.

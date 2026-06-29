@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-06-29
+### Changed
+- **Reorganização do repositório**: SKILL.md substituído por skills separadas em `.opencode/skills/` (`ui-ux`, `backend`, `versioning`). `docs/LOCAL_SETUP.md` movido para `docs/_old/`. `FILE_MAP.md` atualizado para referenciar a nova estrutura de skills. Footer e changelog bumpados para v0.8.0.
+
 ## [0.7.9] - 2026-06-09
 ### Fixed
 - Corrigida duplicidade de tickets `PENDENTE EXTERNO` entre os cards "Aguardando Atendimento" e "Sem Interação". Agora aparecem apenas no card "Aguardando" quando têm < 3d sem atualização, e migram para "Sem Interação" quando ≥ 3d.
