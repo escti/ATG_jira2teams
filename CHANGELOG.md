@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.9] - 2026-06-09
+### Fixed
+- Corrigida duplicidade de tickets `PENDENTE EXTERNO` entre os cards "Aguardando Atendimento" e "Sem Interação". Agora aparecem apenas no card "Aguardando" quando têm < 3d sem atualização, e migram para "Sem Interação" quando ≥ 3d.
+
 ## [0.7.8] - 2026-06-09
 ### Fixed
 - Removida exclusão do status `PENDENTE EXTERNO` da query `pessoais_aguardando`. Tickets com este status agora aparecem imediatamente no card "Aguardando Atendimento", em vez de ficarem invisíveis até o card "Sem Interação" (+3d) detectá-los.
