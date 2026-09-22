@@ -7,6 +7,7 @@
 - Qualquer fix de tela/CSS/sintaxe obriga: bump de versão + entrada no `CHANGELOG.md` (Keep a Changelog).
 - Versão deve estar visível no footer de `src/templates/index.html`.
 - Commits em pt-br. `v1.0.0` reservado à produção final.
+- Bugs e melhorias devem ser registrados em `BUGS.md` / `MELHORIAS.md` (regra `Backlog Obrigatório` na skill `versioning`).
 
 ## Backend (skill `backend`)
 - Todo código Python com `try/catch` explícitos + logging. Sem exceção silenciosa.
