@@ -27,7 +27,7 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
 - Execução manual ou agendada via cron/task scheduler
 
 ### **3. Controles de Atualização**
-- Auto-refresh a cada 5 minutos
+- Auto-refresh dinâmico (5 a 60 minutos, padrão 5 minutos)
 - Botão "Atualizar Agora" para refresh manual
 - Tratamento de erros com mensagens visíveis na tela
 
@@ -36,7 +36,7 @@ Este projeto contém **duas funcionalidades** para monitoramento de chamados do 
 ## 📋 Pré-requisitos
 
 - Python 3.8+
-- Jira Server/DC com API v3
+- Jira (Server/DC ou Cloud) com API v3
 - Flask
 - Python-dotenv
 - requests
@@ -121,13 +121,16 @@ Para facilitar o entendimento profundo da arquitetura, criamos um mapa detalhado
 
 ```
 ATG_jira2teams/
-├── docs/                       # Documentações de setup e versões antigas
+├── docs/                       # Documentações de setup e versões antigas (ver docs/_old/ como arquivado)
 ├── src/                        # Código-fonte da aplicação
 │   ├── app.py                  # Backend Flask (Web)
 │   ├── jira_service.py         # Lógica integrada de conexão com Jira
 │   ├── jira_to_teams.py        # Loop Bot do Teams
 │   └── templates/
 │       └── index.html          # Frontend Web
+├── .opencode/skills/           # Regras de arquitetura (ui-ux, backend, versioning)
+├── CHANGELOG.md                # Histórico de versões (SemVer)
+├── deploy.sh                   # Deploy automatizado na OCI
 ├── docker-compose.yml          # Setup da Stack na OCI
 ├── Dockerfile                  # Build base para python e deps OCI
 ├── requirements.txt            # Dependências unificadas Python
@@ -162,6 +165,8 @@ O sistema utiliza o e-mail do usuário informado no campo de texto (ou o `JIRA_U
 - **Com input personalizado:** `assignee = 'prefixo_ou_email'` → busca chamados do usuário específico
 
 ### Exemplos de Queries:
+
+> Queries simplificadas para leitura. A implementação real está em `src/jira_service.py:get_dashboard_data()`. Ex: `pessoais_aguardando` inclui a regra `(status != 'PENDENTE EXTERNO' OR updatedDate > '-3d')` para evitar duplicidade com Sem Interação; `dba_urgente` filtra por SLA de primeira resposta (`cf[10321]`) ≤ 1h restante e não pausado.
 
 | Card | Query (simplificada) |
 |------|-------|

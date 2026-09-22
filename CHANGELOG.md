@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-09-22
+### Fixed
+- **Restauração do frontend**: `src/templates/index.html` restaurado após deleção acidental no working tree (807 linhas). Footer bumpado para v0.8.1.
+
+### Changed
+- **Sincronização da documentação**: `README.md` (árvore com `CHANGELOG.md`/`deploy.sh`/`skills`, auto-refresh 5–60 min, nota de queries simplificadas, Jira Server/DC ou Cloud), `FILE_MAP.md` (API v3 sem conflito Cloud), `.env.example` (`JIRA_DASHBOARD_USERS` marcado como legado), `docs/_old/` marcado como arquivado com aviso e correção do comando `python src/app.py`.
+
 ## [0.8.0] - 2026-06-29
 ### Changed
 - **Reorganização do repositório**: SKILL.md substituído por skills separadas em `.opencode/skills/` (`ui-ux`, `backend`, `versioning`). `docs/LOCAL_SETUP.md` movido para `docs/_old/`. `FILE_MAP.md` atualizado para referenciar a nova estrutura de skills. Footer e changelog bumpados para v0.8.0.

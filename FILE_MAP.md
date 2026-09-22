@@ -15,7 +15,7 @@ Este documento serve como um guia rápido detalhado da estrutura interna do proj
   - `/api/data`: Endpoint consumido pelo frontend para buscar os chamados atualizados via `jira_service.py`.
 
 ### `src/jira_service.py`
-- **Descrição:** Classe de integração e inteligência (`JiraClient`) que faz as chamadas HTTP para a API v3 do Jira Cloud.
+- **Descrição:** Classe de integração e inteligência (`JiraClient`) que faz as chamadas HTTP para a API v3 do Jira (Server/DC ou Cloud).
 - **Lógica Principal:**
   - `run_jql_query()`: Executa queries (tenta endpoint primário e fallback) com tratamento de erro e logs de auditoria no terminal.
   - `get_dashboard_data()`: Centraliza as 7 queries JQL principais do sistema (Sustentação, SLA, Finalizados, Sem Interação, DBA, Projetos TIC e Projetos GPM) e injeta o "statusCategory" dinamicamente no retorno. A query SLA (pessoais_sla_critico) ainda roda internamente para alimentar badges ⏱ no card "Aguardando Atendimento". A query DBA filtra por SLA de primeira resposta (`cf[10321]`) ≤ 1h e não pausado.

@@ -1,3 +1,5 @@
+> ⚠️ ARQUIVADO — documento histórico e incompleto, não usar como referência. Ver `README.md` + `deploy.sh`.
+
 # Passo a Passo para Deploy Jira2Teams
 
 ## Pré-requisitos

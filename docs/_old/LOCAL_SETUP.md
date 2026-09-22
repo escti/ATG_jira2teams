@@ -1,3 +1,5 @@
+> ⚠️ ARQUIVADO — documento histórico, não usar como referência. Ver `README.md` + `deploy.sh` atuais. Comando correto atual: `python src/app.py`.
+
 # Guia de Configuração Local (Windows)
 
 Siga estes passos para configurar e rodar o dashboard na sua máquina antes de fazer o deploy.
@@ -44,7 +46,7 @@ Para iniciar o servidor localmente:
 
 ```cmd
 # Garanta que está na pasta raiz do projeto
-python app.py
+python src/app.py
 ```
 
 O dashboard estará disponível em: [http://localhost:5000](http://localhost:5000)

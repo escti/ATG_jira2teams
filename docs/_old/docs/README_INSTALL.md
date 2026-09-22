@@ -1,3 +1,5 @@
+> ⚠️ ARQUIVADO — documento histórico, não usar como referência. Stack atual: `jira-web` + `jira-notifier` (porta 5000). Ver `README.md` + `deploy.sh`.
+
 # Guia de Instalação via Docker - ATG Jira2Teams
 
 Este documento descreve como instalar e configurar o sistema de notificações Jira para Teams no servidor **srvcron** (Oracle Linux 8.10, arquitetura ARM64) utilizando Docker e Docker Compose.
