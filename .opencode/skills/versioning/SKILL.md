@@ -1,6 +1,6 @@
 ---
-name: ATG Versioning
-description: Regras de controle de versão, changelog, footer e commits para o projeto Jira2Teams.
+name: versioning
+description: Regras de controle de versão, changelog, footer e commits para o projeto Jira2Teams (ATG).
 ---
 
 # 1. Changelog Strict

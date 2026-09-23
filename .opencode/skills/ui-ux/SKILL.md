@@ -1,6 +1,6 @@
 ---
-name: ATG UI/UX
-description: Regras intransigentes de design system, estilo visual e acessibilidade para o monitor de filas do Jira.
+name: ui-ux
+description: Regras de design system, estilo visual e acessibilidade para o monitor de filas do Jira (ATG).
 ---
 
 # 1. Regras Imutáveis de UI/UX
@@ -15,3 +15,7 @@ description: Regras intransigentes de design system, estilo visual e acessibilid
 
 # 2. Frontend / Frameworks
 - O padrão moderno, seguro e obrigatório é o **Tailwind CSS**. Utility-first classes devem ser usadas para todo o layout, garantindo consistência, performance e facilidade de manutenção. O uso de Bootstrap ou outros frameworks legados está proibido para novas implementações e refatorações.
+
+# 3. Padrões positivos (prefira estes)
+- Card padrão: container `glass-card` + header `card-header-styled` com gradiente + `tbody` próprio + contador no título (modelo em `src/templates/index.html`, bloco "Projetos Ativos TIC").
+- Estados de loading usam `animate-pulse`; tabelas nunca causam scroll horizontal (mobile-first).

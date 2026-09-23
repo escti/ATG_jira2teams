@@ -1,6 +1,6 @@
 # 🗺️ Mapa de Arquivos (Context Map)
 
-> **⚠️ AVISO CRÍTICO PARA IA:** Antes de iniciar qualquer tarefa de codificação, refatoração ou planejamento neste repositório, **VOCÊ DEVE OBRIGATORIAMENTE LER AS SKILLS EM `.opencode/skills/*/SKILL.md` COMO SUA BÍBLIA ABSOLUTA**. Lá estão as regras intransigentes de arquitetura, UI/UX e controle de versão (SemVer), divididas em skills por domínio (`ui-ux`, `backend`, `versioning`), que não podem ser violadas sob nenhuma hipótese.
+> Antes de qualquer código, leia as skills em `.opencode/skills/*/SKILL.md` (arquitetura, UI/UX, versionamento). São a fonte de verdade e não podem ser violadas.
 
 Este documento serve como um guia rápido detalhado da estrutura interna do projeto **ATG Jira2Teams**. Seu objetivo principal é fornecer contexto técnico imediato para a IA e desenvolvedores, evitando a necessidade de ler todos os arquivos para entender a arquitetura.
 

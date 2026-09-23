@@ -37,9 +37,8 @@ python -m py_compile src/app.py src/jira_service.py src/jira_to_teams.py
   input livre de e-mail, fallback `JIRA_USERNAME` do `.env`.
 - Bot Teams dispara só no minuto `59`, 07h–17h, seg–sex; log em `logs/jira_to_teams.log`.
 
-## Armadilhas JQL (`get_dashboard_data()`)
-- `PENDENTE EXTERNO` tem regra anti-duplicidade entre Aguardando (<3d) e Sem Interação (≥3d) — não mexer sem ler o README.
-- `dba_urgente` filtra SLA de 1ª resposta (`cf[10321]`) ≤ 1h restante e não pausado.
+## Armadilhas JQL (`get_dashboard_data()` — detalhes na skill `backend`)
+- Anti-duplicidade `PENDENTE EXTERNO`, SLA `cf[10321]` do `dba_urgente` — ver skill `backend` antes de mexer.
 - `JIRA_DASHBOARD_USERS` no `.env.example` é legado — frontend resolve assignee dinamicamente.
 
 ## Deploy / infra (só referência — nunca rodar em dev)
@@ -51,3 +50,16 @@ python -m py_compile src/app.py src/jira_service.py src/jira_to_teams.py
 - Ignorados: `.env`, `__pycache__/`, `*.log`; `logs/` e `venv/` as createdirs (hoje ausentes da árvore).
 - Nunca commitar `.env` real (só `.env.example` é trackeado).
 - `docs/_old/` é arquivo morto: só adicionar aviso, nunca seguir como instrução.
+
+## Permissões do agente
+- Pode sem pedir: ler arquivos, rodar `py_compile` e comandos de consulta (`git status`, `git log`, `git check-ignore`).
+- Só com ordem explícita: commit, push, deploy, apagar arquivos, `git reset`.
+
+## Skills (regra skill-first)
+- Antes de executar, verifique se alguma skill cobre a tarefa; se for trabalho repetitivo
+  ou com convenções próprias sem skill correspondente, PROPONHA criar/ampliar skill
+  (nome, descrição, conteúdo) e aguarde aprovação antes de executar.
+- Sinais: fiz algo parecido 2+ vezes; 3+ passos com ordem/gotchas próprios;
+  conhecimento que futuros "eus" precisariam e não está em nenhuma skill.
+- Prefira ampliar skill existente a criar nova; nunca crie skill para one-off
+  ou conhecimento genérico que já está no modelo.

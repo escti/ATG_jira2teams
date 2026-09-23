@@ -8,6 +8,17 @@ com a versão do `CHANGELOG.md` que entregou a correção.
 
 _Nenhum bug registrado no momento._
 
+## Resolvidos
+
+### `name` das skills fora da spec do opencode
+- **Data:** 2026-09-23
+- **Onde:** `.opencode/skills/*/SKILL.md` (frontmatter)
+- **Como reproduzir:** comparar o `name` com a regex oficial `^[a-z0-9]+(-[a-z0-9]+)*$` e com o nome do diretório
+- **Esperado:** `name` minúsculo e igual ao diretório (`backend`, `ui-ux`, `versioning`)
+- **Atual:** estava `ATG Backend`, `ATG UI/UX`, `ATG Versioning` (maiúsculas, espaços, `/`)
+- **Severidade:** média (funcionava, mas fora da spec — risco de quebra em updates do opencode)
+- **Correção:** renomeados para `backend`, `ui-ux`, `versioning`; sem bump (só docs/regras)
+
 ### Template
 ```md
 ### <título curto>
