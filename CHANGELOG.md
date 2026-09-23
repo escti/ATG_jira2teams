@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-09-23
+### Added
+- **Card "Epics TIC" na aba Projetos (M-001)**: nova query `pessoais_epics_tic` (`project IN (TIC) AND issuetype = Epic`) com card próprio na web; gráfico "Status - Projetos" passa a incluir Epics. Query `pessoais_projetos_tic` agora exclui Epics (`issuetype != Epic`). Teams inalterado.
+
 ## [0.8.1] - 2026-09-22
 ### Fixed
 - **Restauração do frontend**: `src/templates/index.html` restaurado após deleção acidental no working tree (807 linhas). Footer bumpado para v0.8.1.

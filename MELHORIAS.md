@@ -5,7 +5,7 @@ Ao concluir, marque a versão do `CHANGELOG.md` que a entregou.
 
 | ID    | Ideia                                                        | Status   | Prioridade | Entregue em |
 |-------|--------------------------------------------------------------|----------|------------|-------------|
-| M-001 | Novo card só com TIC do tipo Epic (separar do Projetos TIC)  | proposta | alta       | —           |
+| M-001 | Novo card só com TIC do tipo Epic (separar do Projetos TIC)  | entregue | alta       | 0.9.0       |
 
 ## Detalhes
 
